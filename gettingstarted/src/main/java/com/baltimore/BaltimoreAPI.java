@@ -29,11 +29,11 @@ public class BaltimoreAPI {
     private void download(List<Resource> downloadQueue) {
         for (Resource resource : downloadQueue) {
             try {
-                String response = api.readLive(resource.url);
+                String response = api.readLive(resource);
                 cache(response, resource);
                 apiRest();
             } catch (Exception e) {
-                System.err.printf("Unexpected Exception. Skipping resource s%", resource.name());
+                System.err.printf("Unexpected Exception. Skipping resource %s", resource.name());
                 e.printStackTrace(System.err);
                 continue;
             }

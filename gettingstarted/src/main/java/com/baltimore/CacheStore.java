@@ -49,7 +49,7 @@ public class CacheStore {
         BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(fullPath.toFile(), false));
         os.write(content.getBytes());
         os.flush();
-
+        os.close();
     }
 
     private static boolean isCached(Resource resource) {

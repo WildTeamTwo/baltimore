@@ -16,14 +16,15 @@ import java.util.Optional;
  */
 public class API {
 
-
-    public String readLive(String resource) throws IOException, URISyntaxException {
-       return readLive(resource,null,null);
+    private static final String SPACE_URL_ENCODE = "%20";
+    public String readLive(Resource resource) throws IOException, URISyntaxException {
+       return readLive(resource.url,null,null,resource.orderby);
     }
 
-    public String readLive(String resource, String offset, String limit) throws IOException, URISyntaxException {
+
+    public String readLive(String resource, String offset, String limit, String orderBy) throws IOException, URISyntaxException {
         HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = buildUrl(resource, offset, limit);
+        HttpGet request = buildUrl(resource, offset, limit, orderBy);
         HttpResponse response = client.execute(request);
         if(response.getStatusLine().getStatusCode() != 200)
         {
@@ -38,14 +39,17 @@ public class API {
 
     }
 
-    private static HttpGet buildUrl(String resource, String offset, String limit) throws URISyntaxException{
+    private static HttpGet buildUrl(String resource, String offset, String limit, String orderBy) throws URISyntaxException{
         URIBuilder builder = new URIBuilder(resource);
 
+        if(Optional.ofNullable(orderBy).isPresent() )
+            builder.setParameter("$order", orderBy + " DESC" );
+
         if(Optional.ofNullable(offset).isPresent() )
-            builder.setParameter("offset", offset);
+            builder.setParameter("$offset", offset );
 
         if(Optional.ofNullable(limit).isPresent() )
-            builder.setParameter("limit",limit);
+            builder.setParameter("$limit",limit);
 
         return new HttpGet(builder.build());
     }

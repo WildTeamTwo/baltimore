@@ -19,8 +19,6 @@ public class Main {
         setupCache();
         refreshCacheProgram();
 
-
-
     }
 
     private static void refreshCacheProgram() throws Exception{
@@ -34,7 +32,7 @@ public class Main {
             builder.append(Integer.toString(i+1)).append(") - ").append(resources[i].name()).append("\n");
         }
         builder.append("N  - None ");
-        builder.append("\n Enter choice: ");
+        builder.append("\nEnter choice: ");
 
         do {
             System.out.print(builder.toString());
