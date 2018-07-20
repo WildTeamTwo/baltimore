@@ -1,41 +1,34 @@
 package com.baltimore;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
 /**
  * Created by paul on 03.07.18.
- *
+ * <p>
  * Downloads Balitmore Open Data sets to disk.
- *
  */
 public class Main {
 
 
     public static void main(String[] args) throws Exception {
-
         startMessage();
         setupCache();
-        refreshCacheProgram();
+        commandLine();
 
     }
 
-    private static void refreshCacheProgram() throws Exception{
-        Scanner scanner = new Scanner(System.in);
-        String choice = null;
-        Resource[] resources = Resource.values();
-        StringBuilder builder = new StringBuilder();
+    private static void commandLine() throws Exception {
+        String choices = choices();
+        evaluateChoices(choices);
+    }
 
-        builder.append("\nEnter a number for fresh data\n");
-        for (int i =0; i < resources.length; i++){
-            builder.append(Integer.toString(i+1)).append(") - ").append(resources[i].name()).append("\n");
-        }
-        builder.append("N  - None ");
-        builder.append("\nEnter choice: ");
+    private static void evaluateChoices(String choices) throws  Exception{
+        Scanner scanner = new Scanner(System.in);
+        String choice;
 
         do {
-            System.out.print(builder.toString());
+            System.out.print(choices);
             choice = scanner.next();
 
             if (choice.equals("1")) {
@@ -48,6 +41,10 @@ public class Main {
                 downloadData(Resource.THREE11);
             } else if (choice.equals("5")) {
                 downloadData(Resource.PARKING);
+            } else if (choice.equals("6")) {
+                downloadData(Resource.LIQUOR);
+            } else if (choice.equalsIgnoreCase("A")) {
+                downloadData();
             }
 
             System.out.print("\n");
@@ -56,17 +53,30 @@ public class Main {
 
     }
 
+    private static String choices(){
+
+        StringBuilder builder = new StringBuilder();
+        Resource[] resources = Resource.values();
+        builder.append("\nEnter a number for fresh data\n");
+        for (int i = 0; i < resources.length; i++) {
+            builder.append(Integer.toString(i + 1)).append(") - ").append(resources[i].name()).append("\n");
+        }
+        builder.append("A  - All \n");
+        builder.append("N  - None \n");
+        builder.append("Enter choice: ");
+
+        return builder.toString();
+    }
     private static void setupCache() throws Exception {
 
         System.out.println("Initializing cache ...");
         CacheInitializor.setup();
-        downloadData();
         System.out.println("Cache setup is complete ...");
 
     }
 
     private static void downloadData() throws Exception {
-        new BaltimoreAPI().downloadResources();
+        new BaltimoreAPI().downloadAllResources();
     }
 
     private static void downloadData(Resource resource) throws Exception {
@@ -108,7 +118,7 @@ public class Main {
     }
 
 
-    private static void startMessage(){
+    private static void startMessage() {
         printStars();
         System.out.println("Baltimore Open Data Client");
         printStars();

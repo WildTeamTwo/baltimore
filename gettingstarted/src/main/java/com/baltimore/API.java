@@ -16,21 +16,18 @@ import java.util.Optional;
  */
 public class API {
 
-    private static final String SPACE_URL_ENCODE = "%20";
-    public String readLive(Resource resource) throws IOException, URISyntaxException {
-       return readLive(resource.url,null,null,resource.orderby);
-    }
+    private static final String DEFAULT_LIMIT = "1000";
 
-
-    public String readLive(String resource, String offset, String limit, String orderBy) throws IOException, URISyntaxException {
+    public String readLive(Resource resource, String offset, String limit) throws IOException, URISyntaxException {
         HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = buildUrl(resource, offset, limit, orderBy);
+        HttpGet request = buildUrl(resource.url, offset, limit, resource.orderby);
         HttpResponse response = client.execute(request);
         if(response.getStatusLine().getStatusCode() != 200)
         {
             System.err.printf("\n Received status code %d. \n See response \n %s",
                     response.getStatusLine().getStatusCode(),
                     EntityUtils.toString(response.getEntity()));
+            return null;
         }
         String responseStr = EntityUtils.toString(response.getEntity());
 
@@ -49,7 +46,7 @@ public class API {
             builder.setParameter("$offset", offset );
 
         if(Optional.ofNullable(limit).isPresent() )
-            builder.setParameter("$limit",limit);
+            builder.setParameter("$limit", limit);
 
         return new HttpGet(builder.build());
     }
