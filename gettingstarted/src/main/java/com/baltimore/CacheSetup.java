@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by paul on 17.07.18.
  */
-public class CacheInitializor {
+public class CacheSetup {
 
     private static final String PROJECT_PATH = "bmore/open";
     private static final String VERSION = "2.0";

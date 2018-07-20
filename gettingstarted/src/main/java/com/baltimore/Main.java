@@ -70,7 +70,7 @@ public class Main {
     private static void setupCache() throws Exception {
 
         System.out.println("Initializing cache ...");
-        CacheInitializor.setup();
+        CacheSetup.setup();
         System.out.println("Cache setup is complete ...");
 
     }

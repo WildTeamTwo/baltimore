@@ -1,2 +1,5 @@
 #class files
 *.class
+
+gettingstarted/target/
+
