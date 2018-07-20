@@ -1,5 +1,9 @@
 #class files
 *.class
 
-gettingstarted/target/
+*.iml
+
+*.jar
+
+target/
 
