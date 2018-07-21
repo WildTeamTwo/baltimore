@@ -10,15 +10,48 @@ import java.util.Scanner;
  */
 public class Main {
 
+    public static void main(String[] args)  {
+        try {
 
-    public static void main(String[] args) throws Exception {
-        startMessage();
-        setupCache();
-        commandLine();
-
+            startMessage();
+            playWhoSaidIt();
+            setupCache();
+            chooseDownloads();
+            endMessage();
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
-    private static void commandLine() throws Exception {
+    private static void playWhoSaidIt(){
+        System.out.println("                      But first let's play Trivia!!!!!\\n");
+
+        QuoteGame game = new QuoteGame();
+        String question = game.getQuestion();
+        System.out.print(question);
+        Scanner scanner = new Scanner(System.in);
+
+        String answer = scanner.nextLine();
+
+        if (game.answer.equals(answer)){
+            System.out.println("============================================================");
+            System.out.println("\'YOU GOT THE JUICE NOW\'  That's correct!!!");
+            System.out.println("============================================================");
+
+        }
+        else{
+            System.out.println("============================================================");
+            System.out.println("\'YOU KNOW YOU FCKED UP RIGHT\'. Sorry. that's wrong.");
+            System.out.println("============================================================");
+
+
+        }
+
+        System.out.println("");
+    }
+
+    private static void chooseDownloads() throws Exception {
         String choices = choices();
         evaluateChoices(choices);
     }
@@ -51,6 +84,8 @@ public class Main {
         }
         while (!choice.equalsIgnoreCase("N"));
 
+
+
     }
 
     private static String choices(){
@@ -69,8 +104,9 @@ public class Main {
     }
     private static void setupCache() throws Exception {
 
-        System.out.println("I want to setup cache directories. Select Y if ok or N if Naw");
-        System.out.println("For example /home/bmore/open/arrest ../open/property  ../open/liquor");
+        System.out.println("I want to setup cache directories that may not exists yet.");
+        System.out.println("For example /home/bmore/open/arrest /home/bmore/open/property  /home/bmore/open/liquor");
+        System.out.println("Select Y if ok or N if Naw");
         System.out.printf("Enter choice: ");
         Scanner scanner = new Scanner(System.in);
         String choice = scanner.next();
@@ -132,6 +168,13 @@ public class Main {
         printStars();
         System.out.println("Baltimore Open Data Client");
         printStars();
-
     }
+
+
+    private static void endMessage() {
+        printStars();
+        System.out.println("Noooooooooooooooooooo. Just Kidding.  Cheers. Tschuss. Auf Wiedersehen");
+        printStars();
+    }
+
 }
