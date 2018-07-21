@@ -69,9 +69,19 @@ public class Main {
     }
     private static void setupCache() throws Exception {
 
-        System.out.println("Initializing cache ...");
-        CacheSetup.setup();
-        System.out.println("Cache setup is complete ...");
+        System.out.println("I want to setup cache directories. Select Y if ok or N if Naw");
+        System.out.println("For example /home/bmore/open/arrest ../open/property  ../open/liquor");
+        System.out.printf("Enter choice: ");
+        Scanner scanner = new Scanner(System.in);
+        String choice = scanner.next();
+
+        if(choice.equalsIgnoreCase("Y")) {
+            System.out.println("Initializing cache ...");
+            CacheSetup.setup();
+            System.out.println("Cache setup is complete ...");
+        }
+
+        System.out.print("\n");
 
     }
 

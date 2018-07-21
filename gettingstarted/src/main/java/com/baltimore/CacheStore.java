@@ -30,16 +30,6 @@ public class CacheStore {
         PROJECT_ROOT = HOME.resolve(PROJECT_PATH);
     }
 
-    public List<Resource> uncachedResources() throws IOException {
-        List<Resource> uncachedResources = new ArrayList<Resource>();
-        for (Resource resource : resourceQueue) {
-            if (!isCached(resource)) {
-                uncachedResources.add(resource);
-            }
-        }
-        return uncachedResources;
-    }
-
     public void store(String content, Resource resource, String page) throws IOException {
         if (!Optional.ofNullable(content).isPresent()) {
             return;
@@ -54,38 +44,10 @@ public class CacheStore {
     private static Path filePath(Resource resource, String page){
         return toPath(resource.path, DATA_FILE_NAME + page);
     }
-    private static boolean isCached(Resource resource) {
-        Path path = toPath(resource.path);
-        return fileExists(path);
-    }
 
-    private static boolean fileExists(Path path) {
-        return Files.exists(path);
-    }
-
-    private static boolean hasContent(Path path) {
-        FileChannel channel = null;
-        try {
-            channel = FileChannel.open(path);
-            return channel.size() > 0L;
-        } catch (IOException e) {
-            return false;
-        } finally {
-            try {
-                channel.close();
-            } catch (IOException e) {
-                return false;
-            }
-
-        }
-    }
 
     private static Path toPath(String path, String fileName) {
         return PROJECT_ROOT.resolve(path).resolve(VERSION).resolve(fileName);
     }
 
-
-    private static Path toPath(String path) {
-        return PROJECT_ROOT.resolve(path).resolve(VERSION);
-    }
 }
