@@ -1,4 +1,4 @@
-package com.baltimore;
+package com.baltimore.download;
 
 import lombok.Builder;
 

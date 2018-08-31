@@ -16,8 +16,10 @@ import static com.baltimore.common.Config.GOOGLE_CALL_LIMIT;
 import static com.baltimore.common.Config.PARKING_HOME;
 /**
  * Created by paul on 13.08.18.
+ *
+ * Attempts to clean parking data by filling out missing fields.  Its uses the google geocode api to find missing fields such as neighborhood and police district. The final result is persisted to file.
  */
-public class ParkingMain {
+public class Main {
 
     private BatchCitationReader batchCitationReader;
     private WriterController writer;
@@ -111,7 +113,7 @@ public class ParkingMain {
     }
 
     public static void main(String[] args) throws Exception {
-        new ParkingMain().begin();
+        new Main().begin();
     }
 
 

@@ -70,7 +70,7 @@
                     <manifest>
                         <addClasspath>true</addClasspath>
                         <classpathPrefix>target/classes/</classpathPrefix>
-                        <mainClass>com.baltimore.Main</mainClass>
+                        <mainClass>com.baltimore.download.Main</mainClass>
                     </manifest>
                 </archive>
             </configuration>

@@ -1,4 +1,4 @@
-package com.baltimore;
+package com.baltimore.common;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

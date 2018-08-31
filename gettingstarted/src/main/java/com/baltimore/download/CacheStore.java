@@ -1,4 +1,6 @@
-package com.baltimore;
+package com.baltimore.download;
+
+import com.baltimore.common.Resource;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;

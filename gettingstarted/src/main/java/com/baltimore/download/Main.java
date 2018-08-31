@@ -1,5 +1,6 @@
-package com.baltimore;
+package com.baltimore.download;
 
+import com.baltimore.common.Resource;
 import com.baltimore.common.data.Arrest;
 
 import java.util.List;
@@ -17,7 +18,6 @@ public class Main {
 
             startMessage();
             playWhoSaidIt();
-           // setupCache();
             chooseDownloads();
             endMessage();
         }
@@ -26,36 +26,8 @@ public class Main {
         }
     }
 
-    private static void playWhoSaidIt(){
-        System.out.println("                      But first let's play Trivia!!!!!\n");
-
-        QuoteGame game = new QuoteGame();
-        String question = game.getQuestion();
-        System.out.print(question);
-        Scanner scanner = new Scanner(System.in);
-
-        String answer = scanner.nextLine();
-
-        if (game.answer.equalsIgnoreCase(answer)){
-            System.out.println("============================================================");
-            System.out.println("\'YOU GOT THE JUICE NOW\'  That's correct!!!");
-            System.out.println("============================================================");
-
-        }
-        else{
-            System.out.println("============================================================");
-            System.out.println("\'YOU KNOW YOU FCKED UP RIGHT\'. Sorry. that's wrong.");
-            System.out.println("============================================================");
-
-
-        }
-
-        System.out.println("");
-    }
-
     private static void chooseDownloads() throws Exception {
-        String choices = choices();
-        evaluateChoices(choices);
+        evaluateChoices(choices());
     }
 
     private static void evaluateChoices(String choices) throws  Exception{
@@ -175,6 +147,36 @@ public class Main {
         printStars();
         System.out.println("Noooooooooooooooooooo. Just Kidding.  Cheers. Tschuss. Auf Wiedersehen");
         printStars();
+    }
+
+
+    private static void playWhoSaidIt(){
+        System.out.print("\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020");
+        System.out.print("But first let's play Trivia!!!!!\n");
+
+
+        QuoteGame game = new QuoteGame();
+        String question = game.getQuestion();
+        System.out.print(question);
+        Scanner scanner = new Scanner(System.in);
+
+        String answer = scanner.nextLine();
+
+        if (game.answer.equalsIgnoreCase(answer)){
+            System.out.println("============================================================");
+            System.out.println("\'YOU GOT THE JUICE NOW\'  That's correct!!!");
+            System.out.println("============================================================");
+
+        }
+        else{
+            System.out.println("============================================================");
+            System.out.println("\'YOU KNOW YOU FCKED UP RIGHT\'. Sorry. that's wrong.");
+            System.out.println("============================================================");
+
+
+        }
+
+        System.out.println("");
     }
 
 }

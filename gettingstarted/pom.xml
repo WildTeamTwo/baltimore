@@ -80,7 +80,7 @@
                         <addClasspath>true</addClasspath>
                         <classpathPrefix>/home/paul/.m2/repository</classpathPrefix>
                         <classpathMavenRepositoryLayout>true</classpathMavenRepositoryLayout>
-                        <mainClass>com.baltimore.Main</mainClass>
+                        <mainClass>com.baltimore.download.Main</mainClass>
                     </manifest>
                 </archive>
             </configuration>
