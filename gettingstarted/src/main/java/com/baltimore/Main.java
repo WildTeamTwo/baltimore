@@ -1,5 +1,7 @@
 package com.baltimore;
 
+import com.baltimore.common.data.Arrest;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +17,7 @@ public class Main {
 
             startMessage();
             playWhoSaidIt();
-            setupCache();
+           // setupCache();
             chooseDownloads();
             endMessage();
         }
@@ -25,7 +27,7 @@ public class Main {
     }
 
     private static void playWhoSaidIt(){
-        System.out.println("                      But first let's play Trivia!!!!!\\n");
+        System.out.println("                      But first let's play Trivia!!!!!\n");
 
         QuoteGame game = new QuoteGame();
         String question = game.getQuestion();
@@ -34,7 +36,7 @@ public class Main {
 
         String answer = scanner.nextLine();
 
-        if (game.answer.equals(answer)){
+        if (game.answer.equalsIgnoreCase(answer)){
             System.out.println("============================================================");
             System.out.println("\'YOU GOT THE JUICE NOW\'  That's correct!!!");
             System.out.println("============================================================");
@@ -84,8 +86,6 @@ public class Main {
         }
         while (!choice.equalsIgnoreCase("N"));
 
-
-
     }
 
     private static String choices(){
@@ -94,7 +94,7 @@ public class Main {
         Resource[] resources = Resource.values();
         builder.append("\nEnter a number for fresh data\n");
         for (int i = 0; i < resources.length; i++) {
-            builder.append(Integer.toString(i + 1)).append(") - ").append(resources[i].name()).append("\n");
+            builder.append(Integer.toString(i + 1)).append(" - ").append(resources[i].name()).append("\n");
         }
         builder.append("A  - All \n");
         builder.append("N  - None \n");

@@ -37,6 +37,7 @@ public class QuoteGame {
         quotes.add(new QuoteBuilder().setAuthor("Bubbles").setQuote("Ain't no shame in holding on to grief, as long as you make room for other things too").build());
         quotes.add(new QuoteBuilder().setAuthor("McNulty").setQuote("Cos when it came time for you to f*ck me, you were very gentle").build());
         quotes.add(new QuoteBuilder().setAuthor("Marlow").setQuote("My name is my name").build());
+        quotes.add(new QuoteBuilder().setAuthor("Brother Mouzone").setQuote("What got you here is your word and your reputation. With that alone, you've still got an open line to New York. Without it, you're done.").build());
 
     }
     public String getQuestion(){
@@ -57,7 +58,6 @@ public class QuoteGame {
 
     private static int randomNumber(int seed) {
         Random random = new Random();
-        //TODO: I don't think random.nextInt includes 0.
         return random.nextInt(seed);
     }
 
@@ -86,8 +86,7 @@ public class QuoteGame {
 
 
     private String question(String text){
-
-        return String.format("Who said - %s", text);
+        return String.format("What character in The Wire (HBO) said this statement - %s", text);
     }
     private String authorsToString(List<String> authors){
         StringBuilder builder = new StringBuilder();

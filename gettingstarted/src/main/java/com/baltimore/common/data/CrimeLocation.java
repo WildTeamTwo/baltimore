@@ -1,4 +1,4 @@
-package com.baltimore;
+package com.baltimore.common.data;
 
 import lombok.Data;
 

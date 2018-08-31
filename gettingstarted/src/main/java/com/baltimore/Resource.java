@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public enum Resource {
 
-    PROPERTY("https://data.baltimorecity.gov/resource/6act-qzuy.json","property","propertyid"),
+    PROPERTY("https://data.baltimorecity.gov/resource/6act-qzuy.json","property","violdate"),
     ARREST ("https://data.baltimorecity.gov/resource/icjs-e3jg.json","arrest","arrestdate"),
     VICTIM("https://data.baltimorecity.gov/resource/4ih5-d5d5.json","victim","crimedate"),
     THREE11("https://data.baltimorecity.gov/resource/ni4d-8w7k.json","three11calls","createddate"),
