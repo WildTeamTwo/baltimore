@@ -1,6 +1,6 @@
 package com.baltimore.parking.writer;
 
-import com.baltimore.common.Config;
+import com.baltimore.common.Configuration;
 import com.baltimore.common.Filezee;
 import com.baltimore.common.data.GeoCode;
 import com.baltimore.common.data.GoogleResults;
@@ -22,7 +22,7 @@ public class WriterController {
     private static final String OUT_FILE = "geocode";
     private static final String ERROR_FILE = "error";
     private final static Path outDir;
-    private final static Path outFile;
+    private final static Path resultsFile;
     private final static Path errorFile;
     private final static Path errorDir;
 
@@ -34,9 +34,9 @@ public class WriterController {
     }
 
     static {
-        outDir = Config.PARKING_HOME.resolve(DIRECTORY);
-        outFile = outDir.resolve(OUT_FILE);
-        errorDir = Config.PARKING_HOME.resolve(ERROR_DIRECTORY);
+        outDir = Configuration.GEOCODE_HOME.resolve(DIRECTORY);
+        errorDir = Configuration.GEOCODE_HOME.resolve(ERROR_DIRECTORY);
+        resultsFile = outDir.resolve(OUT_FILE);
         errorFile = errorDir.resolve(ERROR_FILE);
     }
 
@@ -107,15 +107,18 @@ public class WriterController {
     }
 
     private void initWriter() throws IOException {
-        this.writer = new Writer().initWriter(outFile, true);
+        this.writer = new Writer().initWriter(resultsFile, true);
         this.errWriter = new Writer().initWriter(errorFile, true);
     }
 
     private void initFileSystem() throws IOException {
+        Filezee.removeIfExist(resultsFile);
+        Filezee.removeIfExist(errorFile);
         Filezee.createDir(outDir);
         Filezee.createDir(errorDir);
-        Filezee.createFile(outFile);
+        Filezee.createFile(resultsFile);
         Filezee.createFile(errorFile);
     }
+
 
 }

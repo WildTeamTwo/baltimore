@@ -23,6 +23,10 @@ public class Filezee {
         }
     }
 
+    public static void removeIfExist(Path path) throws IOException{
+        java.nio.file.Files.deleteIfExists(path);
+    }
+
     public static boolean exists(Path path) {
         return java.nio.file.Files.exists(path);
     }

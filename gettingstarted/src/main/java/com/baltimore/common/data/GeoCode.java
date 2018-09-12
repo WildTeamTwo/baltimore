@@ -34,26 +34,26 @@ public class GeoCode {
                     geoCode.setPoliticalNeighborhood(c.getLong_name());
                 }
                 if ( AddressComponent.isStreetNumber(c)  ){
-                    geoCode.setPoliticalNeighborhood(c.getLong_name());
+                    geoCode.setStreetNumber(c.getLong_name());
                 }
 
                 if ( AddressComponent.isRoute(c)  ){
-                    geoCode.setPoliticalNeighborhood(c.getLong_name());
+                    geoCode.setRoute(c.getLong_name());
                 }
 
 
                 if ( AddressComponent.isPostalCode(c)  ){
-                    geoCode.setPoliticalNeighborhood(c.getLong_name());
+                    geoCode.setPostalCode(c.getLong_name());
                 }
 
 
 
                 if ( AddressComponent.isPostalSuffix(c)  ){
-                    geoCode.setPoliticalNeighborhood(c.getLong_name());
+                    geoCode.setPostalCodeSuffix(c.getLong_name());
                 }
 
                 if ( AddressComponent.isNearbyPointOfInterest(c)  ){
-                    geoCode.setPoliticalNeighborhood(c.getLong_name());
+                    geoCode.setNearbyPointOfInterests(c.getLong_name());
                 }
 
             }
