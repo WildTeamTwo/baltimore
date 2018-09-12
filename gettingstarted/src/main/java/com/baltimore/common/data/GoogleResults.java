@@ -25,6 +25,7 @@ public class GoogleResults {
      * Created by paul on 19.08.18.
      */
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GoogleResult {
 
         @JsonProperty("address_components")
@@ -43,6 +44,8 @@ public class GoogleResults {
         private String place_id;
         @JsonProperty
         private String[] types;
+        @JsonIgnore
+        private Object plus_code;
 
 
     }

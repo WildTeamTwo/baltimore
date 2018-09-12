@@ -12,7 +12,7 @@ import java.util.List;
 public class BatchCitationReader {
 
     private final FileStream fileStream;
-    private final int BATCH_MAX = 5;
+    private final int MAX_FILES = 5;
 
     private BatchCitationReader(FileStream fs) {
         fileStream = fs;
@@ -27,7 +27,7 @@ public class BatchCitationReader {
         List<String> citations = new ArrayList<String>();
         do {
             citations.addAll(loadToEOF());
-        } while(citations.size() < BATCH_MAX && fileStream.hasNext());
+        } while(citations.size() < MAX_FILES && fileStream.hasNext());
 
         return ParkingCitationMapper.map(citations);
     }

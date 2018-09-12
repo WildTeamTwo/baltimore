@@ -29,7 +29,7 @@ public class GeoCodeClient {
         try {
             HttpResponse response = request(encodeURL(latitude, longitude));
             String body = EntityUtils.toString(response.getEntity());
-            if(isStatus200(response) && isSuccess(body) ){
+            if( isSuccess(response, body) ){
                 EntityUtils.consumeQuietly(response.getEntity());
                 return body;
             }
@@ -45,6 +45,7 @@ public class GeoCodeClient {
 
     private HttpResponse request(HttpGet httpGet) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
+
         HttpResponse response = client.execute(httpGet);
         return  response;
     }
@@ -53,15 +54,14 @@ public class GeoCodeClient {
         return response.getStatusLine().getStatusCode() == 200;
     }
 
-
-    private boolean isSuccess(String body) {
-        return body != null || !body.contains("error_message");
+    private boolean isSuccess(HttpResponse response, String body) {
+        return isStatus200(response);
     }
 
     private HttpGet encodeURL(String latitude, String longitude) throws URISyntaxException {
-        StringBuilder latlng = new StringBuilder(latitude).append(',').append(longitude);
+        String latlng = new StringBuilder(latitude).append(',').append(longitude).toString();
         URIBuilder builder = new URIBuilder(GeoCode_URL);
-        builder.setParameter(coordinate_handle, latlng.toString());
+        builder.setParameter(coordinate_handle, latlng);
         builder.setParameter(api_handle, API_KEY);
 
         return new HttpGet(builder.build());

@@ -1,6 +1,6 @@
 package com.baltimore.parking.reader;
 
-import com.baltimore.common.Config;
+import com.baltimore.common.Configuration;
 import com.baltimore.common.Filezee;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ class FileStream {
     }
 
     static FileStream load() throws IOException{
-        return new FileStream(Filezee.filesInDirectory(Config.PARKING_HOME));
+        return new FileStream(Filezee.filesInDirectory(Configuration.PARKING_HOME));
     }
 
     Path nextFile(){
