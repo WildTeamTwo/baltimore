@@ -10,6 +10,7 @@ public class GeoCode {
     private String streetNumber;
     private String route;
     private String politicalNeighborhood;
+    private String city;
     private String postalCode;
     private String postalCodeSuffix;
     private String nearbyPointOfInterests;
@@ -41,6 +42,9 @@ public class GeoCode {
                     geoCode.setRoute(c.getLong_name());
                 }
 
+                if ( AddressComponent.isRoute(c)  ){
+                    geoCode.setRoute(c.getLong_name());
+                }
 
                 if ( AddressComponent.isPostalCode(c)  ){
                     geoCode.setPostalCode(c.getLong_name());
@@ -56,6 +60,9 @@ public class GeoCode {
                     geoCode.setNearbyPointOfInterests(c.getLong_name());
                 }
 
+                if ( AddressComponent.isCity(c)  ){
+                    geoCode.setCity(c.getLong_name());
+                }
             }
         }
 

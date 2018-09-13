@@ -55,7 +55,12 @@ public class WriterController {
 
         for (ParkingCitation parkingCitation : parkingCitations) {
             try {
-                String formatted = format(parkingCitation);
+                final GeoCode geo = initGeoCode(parkingCitation.getGoogleResults());
+                if(!isInBaltimore(geo)){
+                    //todo: create better filter
+                    continue;
+                }
+                String formatted = format(geo, parkingCitation);
                 writeToFile(formatted.getBytes());
             } catch (Exception e) {
                 errWriter.writeToFile(String.format("Parking Citation %s - %s ", parkingCitation.getCitation(), Arrays.toString(e.getStackTrace())).getBytes() );
@@ -68,12 +73,21 @@ public class WriterController {
     }
 
 
+    private static boolean isInBaltimore(GeoCode geoCode){
+        try {
+            Integer zip = new Integer(geoCode.getPostalCode());
+            return zip >= 21201 && zip <= 21298;
+        }
+        catch (NumberFormatException e){
+            return false;
+        }
+    }
     private void writeToFile(final byte[] line_of_data) throws IOException {
         writer.writeToFile(line_of_data);
     }
 
-    private String format(final ParkingCitation parkingCitation) {
-        final GeoCode geo = initGeoCode(parkingCitation.getGoogleResults());
+    private String format(final GeoCode geo, final ParkingCitation parkingCitation) {
+
         final String tab = "\t";
 
         final String formatted = new StringBuilder(parkingCitation.getCitation()).
