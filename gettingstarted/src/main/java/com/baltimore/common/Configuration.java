@@ -13,9 +13,10 @@ public class Configuration {
     public static final Path GEOCODE_HOME;
     public static final String VERSION = "2.0";
     public static final boolean ACTIVATE_GOOGLE_CALL = true;
+    public static final int CITATION_BATCH_MAX = 35;
     public static final int PERSIST_BATCH_MAX = 75;
     public static final int GOOGLE_CALL_LIMIT = 40; //positive non-prime number.
-
+    public static final int FUZZY_SEARCH_MINIMUM_CONFIDENCE_SCORE = 75;
 
     static {
 

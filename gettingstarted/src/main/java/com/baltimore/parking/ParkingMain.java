@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.baltimore.common.Configuration.ACTIVATE_GOOGLE_CALL;
+import static com.baltimore.common.Configuration.CITATION_BATCH_MAX;
 import static com.baltimore.common.Configuration.PARKING_HOME;
 import static com.baltimore.common.Configuration.PERSIST_BATCH_MAX;
 import static com.baltimore.common.Configuration.GOOGLE_CALL_LIMIT;
@@ -45,7 +46,7 @@ public class ParkingMain {
             int count =0, exceptionCount = 0;
             while (count < BATCH_MAX && exceptionCount < EXCEPTION_MAX) {
                 try {
-                    parkingCitations = loadCitationBatch();
+                    parkingCitations = loadCitationBatch(count, BATCH_MAX);
                     doProcessBatch(parkingCitations);
                     System.out.println("\tBatch complete.");
                 } catch (IOException e) {
@@ -68,7 +69,7 @@ public class ParkingMain {
 
     private void persistBatch(List<ParkingCitation> parkingCitationsWithGoogleGeoCode) throws IOException {
         try {
-            System.out.print("..");
+            System.out.print("\u25A1\u25A1");
             writer.addToFile(parkingCitationsWithGoogleGeoCode);
         } catch (IOException e) {
             e.addSuppressed(new IOException("Encountered unexpected error while persisting data."));
@@ -125,7 +126,7 @@ public class ParkingMain {
 
     private void restGoogleClient(int time) throws InterruptedException{
         if(time % GOOGLE_CALL_LIMIT == 0 ){
-            sleep(2500l);
+            sleep(1500l);
         }
     }
     private void sleep(long time) throws InterruptedException{
@@ -144,7 +145,7 @@ public class ParkingMain {
     }
 
     private ParkingMain(int batch_max) {
-        BATCH_MAX = batch_max > 0 ? batch_max : 30;
+        BATCH_MAX = batch_max > 0 ? batch_max : CITATION_BATCH_MAX;
     }
 
     private static void markTime(String msg){
@@ -162,8 +163,8 @@ public class ParkingMain {
         google = GoogleClient.init();
     }
 
-    private List<ParkingCitation> loadCitationBatch() throws IOException{
-        System.out.println("Reading batch of citations...");
+    private List<ParkingCitation> loadCitationBatch(final int current, final int total) throws IOException{
+        System.out.printf("Reading citations batch %s of %s...\n", current + 1, total);
         return batchCitationReader.loadCitationBatch();
     }
     public static void main(String[] args) throws Exception {

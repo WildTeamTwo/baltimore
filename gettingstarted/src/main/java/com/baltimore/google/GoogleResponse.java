@@ -19,7 +19,7 @@ public class GoogleResponse {
             case "UNKNOWN_ERROR" : throw new RuntimeException(results.getError_message());
             case "OK" : return true;
             case "ZERO_RESULTS" : return true;
-            default:throw new RuntimeException(String.format("Unknown google response status [%s] - Error message [ %s ]", results.getStatus(), results.getError_message()));
+            default:throw new RuntimeException(String.format("unknown google response status [%s] - Error message [ %s ]", results.getStatus(), results.getError_message()));
         }
     }
 }

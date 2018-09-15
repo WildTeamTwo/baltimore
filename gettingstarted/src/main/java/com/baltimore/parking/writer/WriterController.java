@@ -4,7 +4,9 @@ import com.baltimore.common.Configuration;
 import com.baltimore.common.Filezee;
 import com.baltimore.common.data.GeoCode;
 import com.baltimore.common.data.GoogleResults;
+import com.baltimore.common.data.Neighborhood;
 import com.baltimore.common.data.ParkingCitation;
+import com.baltimore.common.data.PoliceDistrict;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -89,6 +91,10 @@ public class WriterController {
     private String format(final GeoCode geo, final ParkingCitation parkingCitation) {
 
         final String tab = "\t";
+        PoliceDistrict policeDistrict = PoliceDistrict.unknown;
+        if(geo.getPoliticalNeighborhood() != null){
+            policeDistrict = Neighborhood.ofNeighborhood(geo.getPoliticalNeighborhood());
+        }
 
         final String formatted = new StringBuilder(parkingCitation.getCitation()).
                 append(tab).
@@ -107,6 +113,16 @@ public class WriterController {
                 append(geo.getPostalCodeSuffix()).
                 append(tab).
                 append(geo.getNearbyPointOfInterests()).
+                append(tab).
+                append(policeDistrict).
+                append(tab).
+                append(parkingCitation.getViolcode()).
+                append(tab).
+                append(parkingCitation.getDescription()).
+                append(tab).
+                append(parkingCitation.getVioldate()).
+                append(tab).
+                append(parkingCitation.getOpenfine()).
                 append("\n").
                 toString();
 
