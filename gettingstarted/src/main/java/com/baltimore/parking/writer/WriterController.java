@@ -4,7 +4,9 @@ import com.baltimore.common.Configuration;
 import com.baltimore.common.Filezee;
 import com.baltimore.common.data.GeoCode;
 import com.baltimore.common.data.GoogleResults;
+import com.baltimore.common.data.Neighborhood;
 import com.baltimore.common.data.ParkingCitation;
+import com.baltimore.common.data.PoliceDistrict;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -55,7 +57,12 @@ public class WriterController {
 
         for (ParkingCitation parkingCitation : parkingCitations) {
             try {
-                String formatted = format(parkingCitation);
+                final GeoCode geo = initGeoCode(parkingCitation.getGoogleResults());
+                if(!isInBaltimore(geo)){
+                    //todo: create better filter
+                    continue;
+                }
+                String formatted = format(geo, parkingCitation);
                 writeToFile(formatted.getBytes());
             } catch (Exception e) {
                 errWriter.writeToFile(String.format("Parking Citation %s - %s ", parkingCitation.getCitation(), Arrays.toString(e.getStackTrace())).getBytes() );
@@ -68,13 +75,26 @@ public class WriterController {
     }
 
 
+    private static boolean isInBaltimore(GeoCode geoCode){
+        try {
+            Integer zip = new Integer(geoCode.getPostalCode());
+            return zip >= 21201 && zip <= 21298;
+        }
+        catch (NumberFormatException e){
+            return false;
+        }
+    }
     private void writeToFile(final byte[] line_of_data) throws IOException {
         writer.writeToFile(line_of_data);
     }
 
-    private String format(final ParkingCitation parkingCitation) {
-        final GeoCode geo = initGeoCode(parkingCitation.getGoogleResults());
+    private String format(final GeoCode geo, final ParkingCitation parkingCitation) {
+
         final String tab = "\t";
+        PoliceDistrict policeDistrict = PoliceDistrict.unknown;
+        if(geo.getPoliticalNeighborhood() != null){
+            policeDistrict = Neighborhood.ofNeighborhood(geo.getPoliticalNeighborhood());
+        }
 
         final String formatted = new StringBuilder(parkingCitation.getCitation()).
                 append(tab).
@@ -93,6 +113,16 @@ public class WriterController {
                 append(geo.getPostalCodeSuffix()).
                 append(tab).
                 append(geo.getNearbyPointOfInterests()).
+                append(tab).
+                append(policeDistrict).
+                append(tab).
+                append(parkingCitation.getViolcode()).
+                append(tab).
+                append(parkingCitation.getDescription()).
+                append(tab).
+                append(parkingCitation.getVioldate()).
+                append(tab).
+                append(parkingCitation.getOpenfine()).
                 append("\n").
                 toString();
 

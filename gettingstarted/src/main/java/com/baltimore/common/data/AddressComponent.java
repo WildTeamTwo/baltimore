@@ -30,6 +30,10 @@ public class AddressComponent {
         return isAddressOfType(c, "route");
     }
 
+    public static boolean isCity(AddressComponent c){
+        return isAddressOfType(c, "localtiy","political");
+    }
+
     public static boolean isPostalCode(AddressComponent c){
         return isAddressOfType(c, "postal_code");
     }
