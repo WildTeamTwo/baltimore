@@ -12,20 +12,23 @@ import org.joda.time.DateTimeZone;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.baltimore.common.Configuration.ACTIVATE_GOOGLE_CALL;
 import static com.baltimore.common.Configuration.CITATION_BATCH_MAX;
+import static com.baltimore.common.Configuration.GOOGLE_API_REST_TIME;
+import static com.baltimore.common.Configuration.GOOGLE_CALL_LIMIT;
 import static com.baltimore.common.Configuration.PARKING_HOME;
 import static com.baltimore.common.Configuration.PERSIST_BATCH_MAX;
-import static com.baltimore.common.Configuration.GOOGLE_CALL_LIMIT;
 
 
 /**
  * Created by paul on 13.08.18.
  * <p>
- * Attempts to clean parking data by cross-referencing it with google geocode to complete missing fields. Results are persisted to file.
+ * Attempts to clean parking data by cross-referencing it with google geocode to complete data picture. Results are persisted to file.
  */
 public class ParkingMain {
 
@@ -36,14 +39,16 @@ public class ParkingMain {
     private final int EXCEPTION_MAX = 10;
     private static final Predicate<ParkingCitation> NEIGHBORHOOD_PRESENT = p -> (p.getNeighborhood() != null);
     private static final Predicate<ParkingCitation> POLICE_DISCTRICT_PRESENT = p -> (p.getPolicedistrict() != null);
-    private static final Predicate<ParkingCitation> LOCATION_MISSING = p -> ( p.getLocation_2() == null &&  p.getLocation() == null  );
+    private static final Predicate<ParkingCitation> LOCATION_MISSING = p -> (p.getLocation_2() == null && p.getLocation() == null);
+    private Map<String, String> violations = new HashMap<>();
+
 
     public void start() throws IOException {
         List<ParkingCitation> parkingCitations;
         markTime("Program start time");
         try {
             initResources();
-            int count =0, exceptionCount = 0;
+            int count = 0, exceptionCount = 0;
             while (count < BATCH_MAX && exceptionCount < EXCEPTION_MAX) {
                 try {
                     parkingCitations = loadCitationBatch(count, BATCH_MAX);
@@ -59,7 +64,7 @@ public class ParkingMain {
         } catch (FileNotFoundException e) {
             e.addSuppressed(new FileNotFoundException(String.format("Input files not found in expected location %s. Please add Baltimore API Parking data to this directory.", PARKING_HOME.toAbsolutePath().toString())));
         }
-
+        logViolations();
         markTime("Program end time");
     }
 
@@ -86,21 +91,21 @@ public class ParkingMain {
         for (int i = 0; i < citations.size(); i++) {
 
             try {
+                trackViolations(citations.get(i));
                 GoogleResults response = callGoogle(citations.get(i));
-                if(GoogleResponse.isOK(response)) {
+                if (GoogleResponse.isOK(response)) {
                     ParkingCitation citation = citations.get(i);
                     citation.setGoogleResults(response);
                     batch.add(citation);
                 }
-                boolean isLastBatch = i + 1 == citations.size() ;
+                boolean isLastBatch = i + 1 == citations.size();
                 restGoogleClient(batch.size());
                 persistBatchIfReady(batch, isLastBatch);
 
             } catch (IOException e) {
                 e.printStackTrace();
                 continue;
-            }
-            catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
                 continue;
             }
@@ -110,34 +115,37 @@ public class ParkingMain {
         return citations;
     }
 
-    private void persistBatchIfReady(List<ParkingCitation> batch, boolean isLastBatch) throws IOException, InterruptedException{
-        if(batch.size() == PERSIST_BATCH_MAX || isLastBatch ) {
+    private void trackViolations(ParkingCitation citation) {
+        violations.put(citation.getViolcode(), citation.getDescription());
+    }
+
+    private void persistBatchIfReady(List<ParkingCitation> batch, boolean isLastBatch) throws IOException, InterruptedException {
+        if (batch.size() == PERSIST_BATCH_MAX || isLastBatch) {
             persistBatch(batch);
             batch.clear();
-            sleep(1500l);
         }
     }
+
     private GoogleResults callGoogle(final ParkingCitation citation) throws IOException {
-        if(citation.getLocation_2() != null)
+        if (citation.getLocation_2() != null)
             return requestGeoCode(citation.getLocation_2().getLatitude(), citation.getLocation_2().getLongitude(), citation.getLocation());
         else
             return requestGeoCode(null, null, citation.getLocation());
     }
 
-    private void restGoogleClient(int time) throws InterruptedException{
-        if(time % GOOGLE_CALL_LIMIT == 0 ){
-            sleep(1500l);
+    private void restGoogleClient(int time) throws InterruptedException {
+        if (time % GOOGLE_CALL_LIMIT == 0) {
+            sleep(GOOGLE_API_REST_TIME);
         }
     }
-    private void sleep(long time) throws InterruptedException{
+
+    private void sleep(long time) throws InterruptedException {
         Thread.sleep(time);
     }
 
     private GoogleResults requestGeoCode(String latitude, String longitude, String address) throws IOException {
         try {
-            if (ACTIVATE_GOOGLE_CALL) {
-                return google.requestGeocode(latitude, longitude, address);
-            }
+            return google.requestGeocode(latitude, longitude, address);
         } catch (IOException e) {
             e.addSuppressed(new IOException(String.format("Google API - Encounterd error for coordinates %s and %s. \n", latitude, longitude)));
         }
@@ -148,7 +156,7 @@ public class ParkingMain {
         BATCH_MAX = batch_max > 0 ? batch_max : CITATION_BATCH_MAX;
     }
 
-    private static void markTime(String msg){
+    private static void markTime(String msg) {
         System.out.printf("\n%s %s\n", msg, DateTime.now(DateTimeZone.UTC));
 
     }
@@ -163,12 +171,23 @@ public class ParkingMain {
         google = GoogleClient.init();
     }
 
-    private List<ParkingCitation> loadCitationBatch(final int current, final int total) throws IOException{
+    private List<ParkingCitation> loadCitationBatch(final int current, final int total) throws IOException {
         System.out.printf("Reading citations batch %s of %s...\n", current + 1, total);
         return batchCitationReader.loadCitationBatch();
     }
+
     public static void main(String[] args) throws Exception {
         ParkingMain.init(0).start();
     }
 
+    private void logViolations() {
+
+        for (String key : violations.keySet()) {
+            try {
+                System.out.printf("%s - %s\n", key, violations.get(key));
+            } catch (Exception e) {
+                continue;
+            }
+        }
+    }
 }

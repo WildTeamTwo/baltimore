@@ -12,11 +12,14 @@ public class Configuration {
     public static final Path PARKING_HOME;
     public static final Path GEOCODE_HOME;
     public static final String VERSION = "2.0";
-    public static final boolean ACTIVATE_GOOGLE_CALL = true;
+    public static final boolean ACTIVATE_GOOGLE_CALL = false;
+    public static final boolean FUZZY_SEARCH_QUICK = false;
     public static final int CITATION_BATCH_MAX = 35;
     public static final int PERSIST_BATCH_MAX = 75;
     public static final int GOOGLE_CALL_LIMIT = 40; //positive non-prime number.
-    public static final int FUZZY_SEARCH_MINIMUM_CONFIDENCE_SCORE = 75;
+    public static final long GOOGLE_API_REST_TIME = 0L; //positive non-prime number.
+    public static final int FUZZY_SEARCH_MINIMUM_CONFIDENCE_SCORE = 80;
+
 
     static {
 

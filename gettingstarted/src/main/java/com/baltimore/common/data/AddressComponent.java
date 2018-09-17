@@ -42,9 +42,7 @@ public class AddressComponent {
         return isAddressOfType(c, "postal_code_suffix");
     }
 
-    public static boolean isNearbyPointOfInterest(AddressComponent c){
-        return isAddressOfType(c, "point_of_interest");
-    }
+    public static boolean isNearbyPointOfInterest(AddressComponent c){return isAddressOfType(c, "point_of_interest");  }
 
     public static boolean isAddressOfType(AddressComponent component, String... keys){
         return arrayHas(component.getTypes(), keys);

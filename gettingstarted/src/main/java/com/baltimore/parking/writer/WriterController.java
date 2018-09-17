@@ -92,8 +92,10 @@ public class WriterController {
 
         final String tab = "\t";
         PoliceDistrict policeDistrict = PoliceDistrict.unknown;
+        String cityCouncil = "unknown";
         if(geo.getPoliticalNeighborhood() != null){
-            policeDistrict = Neighborhood.ofNeighborhood(geo.getPoliticalNeighborhood());
+            policeDistrict = Neighborhood.policeDistrictOf(geo.getPoliticalNeighborhood());
+            cityCouncil = Neighborhood.cityCouncilOf(geo.getPoliticalNeighborhood());
         }
 
         final String formatted = new StringBuilder(parkingCitation.getCitation()).
@@ -115,6 +117,8 @@ public class WriterController {
                 append(geo.getNearbyPointOfInterests()).
                 append(tab).
                 append(policeDistrict).
+                append(tab).
+                append(cityCouncil).
                 append(tab).
                 append(parkingCitation.getViolcode()).
                 append(tab).

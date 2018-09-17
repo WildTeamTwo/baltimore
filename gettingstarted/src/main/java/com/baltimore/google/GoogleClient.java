@@ -1,6 +1,7 @@
 package com.baltimore.google;
 
 
+import com.baltimore.common.Configuration;
 import com.baltimore.common.JsonMap;
 import com.baltimore.common.data.GoogleResults;
 
@@ -25,19 +26,19 @@ public class GoogleClient {
         try {
 
             String geocode = findGeoCodeInCache(latitude, longitude, address);
-            if (geocode == null) {
+            if (geocode == null && Configuration.ACTIVATE_GOOGLE_CALL ) {
                 geocode = callGoogle(latitude, longitude, address);
                 results = JsonMap.map(geocode, latitude, longitude);
                 cacheGeoCode(results, latitude, longitude, address, geocode);
                 return results;
             }
-            else {
-                results = JsonMap.map(geocode, latitude, longitude);
+            else if(geocode != null) {
+                return JsonMap.map(geocode, latitude, longitude);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return results;
+        return null;
     }
 
     private String callGoogle(String latitude, String longitude, String address ) throws IOException{
