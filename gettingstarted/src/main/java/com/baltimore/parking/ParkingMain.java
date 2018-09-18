@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static com.baltimore.common.Configuration.ACTIVATE_GOOGLE_CALL;
 import static com.baltimore.common.Configuration.CITATION_BATCH_MAX;
 import static com.baltimore.common.Configuration.GOOGLE_API_REST_TIME;
 import static com.baltimore.common.Configuration.GOOGLE_CALL_LIMIT;
@@ -64,7 +63,7 @@ public class ParkingMain {
         } catch (FileNotFoundException e) {
             e.addSuppressed(new FileNotFoundException(String.format("Input files not found in expected location %s. Please add Baltimore API Parking data to this directory.", PARKING_HOME.toAbsolutePath().toString())));
         }
-        logViolations();
+
         markTime("Program end time");
     }
 
@@ -74,7 +73,7 @@ public class ParkingMain {
 
     private void persistBatch(List<ParkingCitation> parkingCitationsWithGoogleGeoCode) throws IOException {
         try {
-            System.out.print("\u25A1\u25A1");
+            System.out.print("\u25A1\u25A0");
             writer.addToFile(parkingCitationsWithGoogleGeoCode);
         } catch (IOException e) {
             e.addSuppressed(new IOException("Encountered unexpected error while persisting data."));
@@ -85,9 +84,9 @@ public class ParkingMain {
         citations.removeIf(NEIGHBORHOOD_PRESENT);
         citations.removeIf(POLICE_DISCTRICT_PRESENT);
         citations.removeIf(LOCATION_MISSING);
-        System.out.println(citations.size() != 0 ? String.format("\tCross Referencing baltimore parking batch w/Google location data [%s records]...", citations.size()) : "\tBatch did not contain data required to cross reference. Skipping. ");
+        System.out.println(citations.size() != 0 ? String.format("\tCombine baltimore data w/Google [%s parking citations]...", citations.size()) : "\tBatch did not contain data required to cross reference. Skipping. ");
         List<ParkingCitation> batch = new ArrayList<>();
-        System.out.print("\tPersisting");
+        System.out.print("\tGoogle linking ");
         for (int i = 0; i < citations.size(); i++) {
 
             try {
@@ -157,7 +156,7 @@ public class ParkingMain {
     }
 
     private static void markTime(String msg) {
-        System.out.printf("\n%s %s\n", msg, DateTime.now(DateTimeZone.UTC));
+        System.out.printf("\n%s %s\n\n", msg, DateTime.now(DateTimeZone.UTC));
 
     }
 
@@ -180,14 +179,4 @@ public class ParkingMain {
         ParkingMain.init(0).start();
     }
 
-    private void logViolations() {
-
-        for (String key : violations.keySet()) {
-            try {
-                System.out.printf("%s - %s\n", key, violations.get(key));
-            } catch (Exception e) {
-                continue;
-            }
-        }
-    }
 }

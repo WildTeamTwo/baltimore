@@ -7,6 +7,9 @@ import com.baltimore.common.data.GoogleResults;
 import com.baltimore.common.data.Neighborhood;
 import com.baltimore.common.data.ParkingCitation;
 import com.baltimore.common.data.PoliceDistrict;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,12 +24,14 @@ public class WriterController {
 
     private static final String DIRECTORY = "geocode/";
     private static final String ERROR_DIRECTORY = "error/";
-    private static final String OUT_FILE = "geocode";
+    private static final String RESULTS_FILE = "geocode";
     private static final String ERROR_FILE = "error";
+    private static final String EXTENSION = ".txt";
     private final static Path outDir;
     private final static Path resultsFile;
     private final static Path errorFile;
     private final static Path errorDir;
+    private static DateTimeFormatter formatter;
 
     private Writer writer;
     private Writer errWriter;
@@ -36,10 +41,12 @@ public class WriterController {
     }
 
     static {
+        formatter = DateTimeFormat.forPattern("MM-dd-yyyy HH:mm:ss");
         outDir = Configuration.GEOCODE_HOME.resolve(DIRECTORY);
         errorDir = Configuration.GEOCODE_HOME.resolve(ERROR_DIRECTORY);
-        resultsFile = outDir.resolve(OUT_FILE);
-        errorFile = errorDir.resolve(ERROR_FILE);
+        resultsFile = outDir.resolve(fileName(RESULTS_FILE));
+        errorFile = errorDir.resolve(fileName(ERROR_FILE));
+
     }
 
     public static WriterController init() throws IOException{
@@ -92,7 +99,7 @@ public class WriterController {
 
         final String tab = "\t";
         PoliceDistrict policeDistrict = PoliceDistrict.unknown;
-        String cityCouncil = "unknown";
+        String cityCouncil = null;
         if(geo.getPoliticalNeighborhood() != null){
             policeDistrict = Neighborhood.policeDistrictOf(geo.getPoliticalNeighborhood());
             cityCouncil = Neighborhood.cityCouncilOf(geo.getPoliticalNeighborhood());
@@ -154,5 +161,11 @@ public class WriterController {
         Filezee.createFile(errorFile);
     }
 
+    private static String fileName(String filename){
+        return appendTimeStamp(filename) + EXTENSION;
+    }
+    private static String appendTimeStamp(String filename){
+        return filename + "-" + formatter.print(DateTime.now());
+    }
 
 }
