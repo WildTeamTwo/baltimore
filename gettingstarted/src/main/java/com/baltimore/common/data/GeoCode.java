@@ -42,15 +42,9 @@ public class GeoCode {
                     geoCode.setRoute(c.getLong_name());
                 }
 
-                if ( AddressComponent.isRoute(c)  ){
-                    geoCode.setRoute(c.getLong_name());
-                }
-
                 if ( AddressComponent.isPostalCode(c)  ){
                     geoCode.setPostalCode(c.getLong_name());
                 }
-
-
 
                 if ( AddressComponent.isPostalSuffix(c)  ){
                     geoCode.setPostalCodeSuffix(c.getLong_name());

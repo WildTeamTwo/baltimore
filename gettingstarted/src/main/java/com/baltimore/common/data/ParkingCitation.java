@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ParkingCitation {
+public class ParkingCitation implements Googleable {
     @JsonProperty
     private String openpenalty;
     @JsonProperty
@@ -62,6 +62,21 @@ public class ParkingCitation {
             return false;
         }
         return parkingCitation.getLocation_2().getLatitude() != null || parkingCitation.getLocation_2().getLongitude() != null;
+    }
+
+    @Override
+    public String getLatitude() {
+        return location_2 != null ? location_2.getLatitude() : null;
+    }
+
+    @Override
+    public String getLongitude() {
+        return location_2 != null ? location_2.getLongitude() : null;
+    }
+
+    @Override
+    public String getAddress() {
+        return location;
     }
 
 

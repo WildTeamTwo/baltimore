@@ -66,18 +66,33 @@ class DAOImpl {
     }
 
     public boolean createGeoCode(final String latitude, final String longitude, final String json) throws SQLException {
-        Statement statement = connection.createStatement();
-        String query = new StringBuilder(insertGeometryClause).append(toValuesClause(latitude, longitude, json)).toString();
-        int results = statement.executeUpdate(query);
-        return results > 0 ? true : false;
+        String query = null;
+        try {
+            Statement statement = connection.createStatement();
+            query = new StringBuilder(insertGeometryClause).append(toValuesClause(latitude, longitude, json)).toString();
+            int results = statement.executeUpdate(query);
+            return results > 0 ? true : false;
+        }
+        catch (SQLException e){
+            e.addSuppressed(new SQLException("ERROR QUERY: " + query));
+            throw e;
+        }
     }
 
 
     public boolean createGeoCode(final String address, final String json) throws SQLException {
-        Statement statement = connection.createStatement();
-        String query = new StringBuilder(insertAddressClause).append(toValuesClause(address, json)).toString();
-        int results = statement.executeUpdate(query);
-        return results > 0 ? true : false;
+        String query = null;
+        try {
+
+            Statement statement = connection.createStatement();
+            query = new StringBuilder(insertAddressClause).append(toValuesClause(address, json)).toString();
+            int results = statement.executeUpdate(query);
+            return results > 0 ? true : false;
+        } catch (SQLException e) {
+            e.addSuppressed(new SQLException("ERROR QUERY: " + query));
+            throw e;
+        }
+
     }
 
     private static String toValuesClause(String latitude, String longitude, String json) {
@@ -90,7 +105,7 @@ class DAOImpl {
     }
     private static String toValuesClause(final String address, final String json) {
         String compressed = compressToBase64(json);
-        return new StringBuilder(" values ").append(" ( ").append("'").append(address).append("'").append(",")
+        return new StringBuilder(" values ").append(" ( ").append("'").append(escapeIfAny(address)).append("'").append(",")
                 .append("'").append(compressed).append("'").append(" )").toString();
 
     }

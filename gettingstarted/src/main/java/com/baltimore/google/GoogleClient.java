@@ -49,7 +49,7 @@ public class GoogleClient {
     }
 
     private void cacheGeoCode(GoogleResults results, String latitude, String longitude, String address, String geocode) throws IOException, SQLException {
-        if(results.getStatus().equalsIgnoreCase("OK")) {
+        if(results.getStatus().equalsIgnoreCase("OK") || results.getStatus().equalsIgnoreCase("ZERO_RESULTS")) {
             if(latitude != null)
                 geocodeCache.store(latitude, longitude, geocode);
             else

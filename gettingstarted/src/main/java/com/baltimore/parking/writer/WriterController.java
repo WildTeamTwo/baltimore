@@ -41,7 +41,7 @@ public class WriterController {
     }
 
     static {
-        formatter = DateTimeFormat.forPattern("MM-dd-yyyy HH:mm:ss");
+        formatter = DateTimeFormat.forPattern("MMddYY-HHMM");
         outDir = Configuration.GEOCODE_HOME.resolve(DIRECTORY);
         errorDir = Configuration.GEOCODE_HOME.resolve(ERROR_DIRECTORY);
         resultsFile = outDir.resolve(fileName(RESULTS_FILE));
