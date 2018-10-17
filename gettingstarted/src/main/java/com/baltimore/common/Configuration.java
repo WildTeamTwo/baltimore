@@ -14,7 +14,7 @@ public class Configuration {
     public static final String VERSION = "2.0";
     public static final boolean ACTIVATE_GOOGLE_CALL = true;
     public static final boolean FUZZY_SEARCH_QUICK = false;
-    public static final int CITATION_BATCH_MAX = 100;
+    public static final int CITATION_BATCH_MAX = 200;
     public static final int GOOGLE_CALL_LIMIT = 40; //positive non-prime number.
     public static final long GOOGLE_API_REST_TIME = 0L; //positive non-prime number.
     public static final int FUZZY_SEARCH_MINIMUM_CONFIDENCE_SCORE = 80;
