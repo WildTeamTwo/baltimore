@@ -10,9 +10,9 @@ import java.nio.file.Path;
  */
 public class Writer {
 
-    private  BufferedOutputStream writer;
+    private BufferedOutputStream writer;
 
-    public Writer(){
+    public Writer() {
 
     }
 
@@ -22,7 +22,7 @@ public class Writer {
         writer.write(line_of_data);
     }
 
-    protected  Writer initWriter(Path path, boolean append) throws IOException {
+    protected Writer initWriter(Path path, boolean append) throws IOException {
         writer = new BufferedOutputStream(new FileOutputStream(path.toFile(), append));
         return this;
     }

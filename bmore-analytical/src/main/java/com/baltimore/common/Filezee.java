@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Filezee {
 
@@ -23,7 +22,7 @@ public class Filezee {
         }
     }
 
-    public static void removeIfExist(Path path) throws IOException{
+    public static void removeIfExist(Path path) throws IOException {
         java.nio.file.Files.deleteIfExists(path);
     }
 
@@ -32,7 +31,7 @@ public class Filezee {
     }
 
 
-    public static List<Path> filesInDirectory(Path path) throws  IOException {
-       return Files.list(path).collect(Collectors.<Path>toList());
+    public static List<Path> filesInDirectory(Path path) throws IOException {
+        return Files.list(path).collect(Collectors.<Path>toList());
     }
 }

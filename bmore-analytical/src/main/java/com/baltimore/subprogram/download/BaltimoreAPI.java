@@ -13,7 +13,23 @@ public class BaltimoreAPI {
 
     private static final CacheStore cache = new CacheStore();
     private static final API api = new API();
-    private int pageLimit = 1000;
+    private final int pageLimit;
+
+    private BaltimoreAPI(){
+        pageLimit = 1000;
+    }
+
+    private BaltimoreAPI(int pageLimit){
+        this.pageLimit = pageLimit;
+    }
+
+    public static BaltimoreAPI init(){
+        return new BaltimoreAPI();
+    }
+
+    public static BaltimoreAPI init(int pageLimit){
+        return new BaltimoreAPI(pageLimit);
+    }
 
     public void downloadAllResources() throws Exception {
         download(Arrays.asList(Resource.values()));
@@ -24,16 +40,16 @@ public class BaltimoreAPI {
     }
 
     private void download(List<Resource> downloadQueue) {
-        final int limit = 1000;
+        final int limit = pageLimit;
         String response = null;
         Integer offset = 1;
         for (Resource resource : downloadQueue) {
             try {
                 System.out.printf("\n Downloading %s data. Maximum of %s pages...\n", resource.name(), pageLimit);
-                for(int page = 1; page <= pageLimit; page++) {
+                for (int page = 1; page <= pageLimit; page++) {
                     System.out.printf("Downloading page %s ...\n", Integer.toString(page));
                     response = api.readLive(resource, offset.toString(), null);
-                    if(response == null){
+                    if (response == null) {
                         break;
                     }
                     cache(response, resource, page);

@@ -4,14 +4,13 @@ import com.baltimore.common.data.GoogleResults;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * Created by paul on 17.08.18.
  */
-public class JsonMap   {
+public class JsonMap {
 
-    public static  <T extends Object>  T mapJsonToCitation(String json, Class<T> clazz) throws IOException {
+    public static <T extends Object> T mapJsonToCitation(String json, Class<T> clazz) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         return objectMapper.readValue(json, clazz);

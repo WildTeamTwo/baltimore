@@ -1,8 +1,8 @@
 package com.baltimore.subprogram.download;
 
-import com.baltimore.SubProgram;
-import com.baltimore.common.Cosmetics;
+import static com.baltimore.common.Cosmetics.printStars;
 import com.baltimore.common.Resource;
+import com.baltimore.subprogram.SubProgram;
 
 import java.util.Scanner;
 
@@ -11,49 +11,19 @@ import java.util.Scanner;
  */
 public class BmoreDownloadController implements SubProgram {
 
-    private BmoreDownloadController(){
+    private BmoreDownloadController() {
 
     }
 
-    public static BmoreDownloadController init(){
+    public static BmoreDownloadController init() {
         return new BmoreDownloadController();
     }
-
-    @Override
-    public String displayName() {
-        return "Baltimore Data Grab";
-    }
-
-    @Override
-    public void start() {
-        try {
-            startMessage();
-            chooseBmoreDataToDownload();
-            end();
-        }
-        catch ( Exception e){
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    @Override
-    public void destroy() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void end() {
-        endMessage();
-        throw new UnsupportedOperationException();
-    }
-
 
     private static void chooseBmoreDataToDownload() throws Exception {
         promptUser(getChoices());
     }
 
-    private static void promptUser(String choices) throws  Exception{
+    private static void promptUser(String choices) throws Exception {
         Scanner scanner = new Scanner(System.in);
         String choice;
 
@@ -83,7 +53,13 @@ public class BmoreDownloadController implements SubProgram {
 
     }
 
-    private static String getChoices(){
+    private static int promptUserMaxPages() throws Exception{
+        System.out.print("How many pages would you like to download (Default is 1000 pages which is ~550MB) : ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
+    private static String getChoices() {
 
         StringBuilder builder = new StringBuilder();
         Resource[] resources = Resource.values();
@@ -99,28 +75,54 @@ public class BmoreDownloadController implements SubProgram {
     }
 
     private static void downloadData(Resource resource) throws Exception {
+        int pageLimit = promptUserMaxPages();
         System.out.printf("Refreshing data set...");
-        new BaltimoreAPI().downloadResource(resource);
+        BaltimoreAPI.init(pageLimit).downloadResource(resource);
         System.out.println("Refresh complete.");
     }
 
-
     private static void downloadData() throws Exception {
-        new BaltimoreAPI().downloadAllResources();
+        BaltimoreAPI.init().downloadAllResources();
     }
 
-    private static void startMessage() {
-        Cosmetics.printStars();
-        System.out.println("Baltimore Data Grab");
-        Cosmetics.printStars();
+    @Override
+    public String displayName() {
+        return "Get Baltimore Data";
+    }
+
+    @Override
+    public void start() {
+        try {
+            startMessage();
+            chooseBmoreDataToDownload();
+            end();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void end() {
+        endMessage();
     }
 
 
-    private static void endMessage() {
-        Cosmetics.printStars();
-        System.out.println("Noooooooooooooooooooo. Just Kidding.  Cheers. Tschuss. Auf Wiedersehen");
-        Cosmetics.printStars();
+    private void startMessage() {
+        printStars();
+        System.out.println(displayName());
+        printStars();
     }
 
+    private void endMessage() {
+        printStars();
+        System.out.println("End " + displayName());
+        printStars();
+    }
 
 }

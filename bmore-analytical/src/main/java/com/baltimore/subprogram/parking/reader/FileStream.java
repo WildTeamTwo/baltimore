@@ -15,26 +15,26 @@ class FileStream {
     private final List<Path> rawParking;
 
 
-    private FileStream(List<Path> files){
+    private FileStream(List<Path> files) {
         rawParking = files;
     }
 
-    static FileStream load() throws IOException{
+    static FileStream load() throws IOException {
         return new FileStream(Filezee.filesInDirectory(Configuration.PARKING_HOME));
     }
 
-    Path nextFile(){
-        if(hasNext())
-        {
+    Path nextFile() {
+        if (hasNext()) {
             return rawParking.get(0);
         }
         return null;
     }
-    Path removeCurrent(){
+
+    Path removeCurrent() {
         return rawParking.remove(0);
     }
 
-    boolean hasNext(){
+    boolean hasNext() {
         return !rawParking.isEmpty();
     }
 

@@ -19,12 +19,26 @@ public class API {
 
     private static final String DEFAULT_LIMIT = "1000";
 
+    private static HttpGet buildUrl(String resource, String offset, String limit, String orderBy) throws URISyntaxException {
+        URIBuilder builder = new URIBuilder(resource);
+
+        if (Optional.ofNullable(orderBy).isPresent())
+            builder.setParameter("$order", orderBy + " DESC");
+
+        if (Optional.ofNullable(offset).isPresent())
+            builder.setParameter("$offset", offset);
+
+        if (Optional.ofNullable(limit).isPresent())
+            builder.setParameter("$limit", limit);
+
+        return new HttpGet(builder.build());
+    }
+
     public String readLive(Resource resource, String offset, String limit) throws IOException, URISyntaxException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = buildUrl(resource.url, offset, limit, resource.orderby);
         HttpResponse response = client.execute(request);
-        if(response.getStatusLine().getStatusCode() != 200)
-        {
+        if (response.getStatusLine().getStatusCode() != 200) {
             System.err.printf("\n Received status code %d. \n See response \n %s",
                     response.getStatusLine().getStatusCode(),
                     EntityUtils.toString(response.getEntity()));
@@ -36,22 +50,6 @@ public class API {
         return responseStr;
 
     }
-
-    private static HttpGet buildUrl(String resource, String offset, String limit, String orderBy) throws URISyntaxException{
-        URIBuilder builder = new URIBuilder(resource);
-
-        if(Optional.ofNullable(orderBy).isPresent() )
-            builder.setParameter("$order", orderBy + " DESC" );
-
-        if(Optional.ofNullable(offset).isPresent() )
-            builder.setParameter("$offset", offset );
-
-        if(Optional.ofNullable(limit).isPresent() )
-            builder.setParameter("$limit", limit);
-
-        return new HttpGet(builder.build());
-    }
-
 
 
 }

@@ -18,16 +18,16 @@ public class BatchCitationReader {
         fileStream = fs;
     }
 
-    public static BatchCitationReader init() throws  IOException{
+    public static BatchCitationReader init() throws IOException {
         FileStream fs = FileStream.load();
         return new BatchCitationReader(fs);
     }
 
-    public List<ParkingCitation> loadCitationBatch() throws IOException{
+    public List<ParkingCitation> loadCitationBatch() throws IOException {
         List<String> citations = new ArrayList<String>();
         do {
             citations.addAll(loadToEOF());
-        } while(citations.size() < MAX_FILES && fileStream.hasNext());
+        } while (citations.size() < MAX_FILES && fileStream.hasNext());
 
         return ParkingCitationMapper.map(citations);
     }
@@ -35,7 +35,7 @@ public class BatchCitationReader {
     private List<String> loadToEOF() throws IOException {
         List<String> citations = null;
 
-        if(fileStream.hasNext()) {
+        if (fileStream.hasNext()) {
             JsonReader reader = JsonReader.init(fileStream.nextFile(), 0);
             citations = reader.loadToEOF();
             removeFile();
@@ -44,7 +44,7 @@ public class BatchCitationReader {
         return citations;
     }
 
-    private void removeFile(){
+    private void removeFile() {
         fileStream.removeCurrent();
     }
 

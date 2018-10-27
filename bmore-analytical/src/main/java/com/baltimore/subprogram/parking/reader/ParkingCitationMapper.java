@@ -24,8 +24,7 @@ public class ParkingCitationMapper {
                 array_of_jsons = makeArrayOfJsons(json);
 
                 all.addAll(unmarshallToCollection(array_of_jsons));
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 //TODO: impelement try again - if unmarshall fails it's likely because the first/last json object is not well formed.  If this happens delete characters until the next best json is reached do the operation again. If it still fails. continue to next element.
                 e.printStackTrace();
                 System.err.print(array_of_jsons);
@@ -36,12 +35,14 @@ public class ParkingCitationMapper {
         return all;
     }
 
-    private static List<ParkingCitation> unmarshallToCollection(String array_of_jsons) throws IOException{
+    private static List<ParkingCitation> unmarshallToCollection(String array_of_jsons) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(array_of_jsons, new TypeReference<List<ParkingCitation>>(){});
+        return objectMapper.readValue(array_of_jsons, new TypeReference<List<ParkingCitation>>() {
+        });
 
     }
-    private static String makeArrayOfJsons(String json)  {
+
+    private static String makeArrayOfJsons(String json) {
         return new StringBuilder().append("[").append(json).append("]").toString();
     }
 

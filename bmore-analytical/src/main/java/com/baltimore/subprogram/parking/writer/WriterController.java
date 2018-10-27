@@ -33,13 +33,6 @@ public class WriterController {
     private final static Path errorDir;
     private static DateTimeFormatter formatter;
 
-    private Writer writer;
-    private Writer errWriter;
-
-    private WriterController(){
-
-    }
-
     static {
         formatter = DateTimeFormat.forPattern("MMddYY-HHMM");
         outDir = Configuration.GEOCODE_HOME.resolve(DIRECTORY);
@@ -49,10 +42,34 @@ public class WriterController {
 
     }
 
-    public static WriterController init() throws IOException{
+    private Writer writer;
+    private Writer errWriter;
+
+    private WriterController() {
+
+    }
+
+    public static WriterController init() throws IOException {
         WriterController writerController = new WriterController();
         writerController.initFileSystem();
         return writerController;
+    }
+
+    private static boolean isInBaltimore(GeoCode geoCode) {
+        try {
+            Integer zip = new Integer(geoCode.getPostalCode());
+            return zip >= 21201 && zip <= 21298;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static String fileName(String filename) {
+        return appendTimeStamp(filename) + EXTENSION;
+    }
+
+    private static String appendTimeStamp(String filename) {
+        return filename + "-" + formatter.print(DateTime.now());
     }
 
     public void addToFile(List<ParkingCitation> parkingCitations) throws IOException {
@@ -65,14 +82,14 @@ public class WriterController {
         for (ParkingCitation parkingCitation : parkingCitations) {
             try {
                 final GeoCode geo = initGeoCode(parkingCitation.getGoogleResults());
-                if(!isInBaltimore(geo)){
+                if (!isInBaltimore(geo)) {
                     //todo: create better filter
                     continue;
                 }
                 String formatted = format(geo, parkingCitation);
                 writeToFile(formatted.getBytes());
             } catch (Exception e) {
-                errWriter.writeToFile(String.format("Parking Citation %s - %s ", parkingCitation.getCitation(), Arrays.toString(e.getStackTrace())).getBytes() );
+                errWriter.writeToFile(String.format("Parking Citation %s - %s ", parkingCitation.getCitation(), Arrays.toString(e.getStackTrace())).getBytes());
                 continue;
             }
         }
@@ -81,16 +98,6 @@ public class WriterController {
         errWriter.closeOutputStream();
     }
 
-
-    private static boolean isInBaltimore(GeoCode geoCode){
-        try {
-            Integer zip = new Integer(geoCode.getPostalCode());
-            return zip >= 21201 && zip <= 21298;
-        }
-        catch (NumberFormatException e){
-            return false;
-        }
-    }
     private void writeToFile(final byte[] line_of_data) throws IOException {
         writer.writeToFile(line_of_data);
     }
@@ -100,7 +107,7 @@ public class WriterController {
         final String tab = "\t";
         PoliceDistrict policeDistrict = PoliceDistrict.unknown;
         String cityCouncil = null;
-        if(geo.getPoliticalNeighborhood() != null){
+        if (geo.getPoliticalNeighborhood() != null) {
             policeDistrict = Neighborhood.policeDistrictOf(geo.getPoliticalNeighborhood());
             cityCouncil = Neighborhood.cityCouncilOf(geo.getPoliticalNeighborhood());
         }
@@ -159,13 +166,6 @@ public class WriterController {
         Filezee.createDir(errorDir);
         Filezee.createFile(resultsFile);
         Filezee.createFile(errorFile);
-    }
-
-    private static String fileName(String filename){
-        return appendTimeStamp(filename) + EXTENSION;
-    }
-    private static String appendTimeStamp(String filename){
-        return filename + "-" + formatter.print(DateTime.now());
     }
 
 }

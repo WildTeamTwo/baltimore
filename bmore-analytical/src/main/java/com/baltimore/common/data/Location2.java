@@ -12,8 +12,8 @@ import lombok.Data;
 public class Location2 {
     @JsonProperty
     private String latitude;
-     @JsonProperty
-     private String longitude;
+    @JsonProperty
+    private String longitude;
     @JsonProperty
     private String needs_recoding;
 }

@@ -6,7 +6,7 @@ package com.baltimore.google;
 class CacheWriter {
 
 
-    void write(String lat, String lon, String json){
+    void write(String lat, String lon, String json) {
 
 
     }

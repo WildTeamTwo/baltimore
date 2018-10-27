@@ -21,18 +21,21 @@ public class GoogleClient {
         geocodeCache = GeoCodeCache.init();
     }
 
+    public static GoogleClient init() {
+        return new GoogleClient();
+    }
+
     public GoogleResults requestGeocode(String latitude, String longitude, String address) throws IOException {
         GoogleResults results = null;
         try {
 
             String geocode = findGeoCodeInCache(latitude, longitude, address);
-            if (geocode == null && Configuration.ACTIVATE_GOOGLE_CALL ) {
+            if (geocode == null && Configuration.ACTIVATE_GOOGLE_CALL) {
                 geocode = callGoogle(latitude, longitude, address);
                 results = JsonMap.map(geocode, latitude, longitude);
                 cacheGeoCode(results, latitude, longitude, address, geocode);
                 return results;
-            }
-            else if(geocode != null) {
+            } else if (geocode != null) {
                 return JsonMap.map(geocode, latitude, longitude);
             }
         } catch (SQLException e) {
@@ -41,24 +44,21 @@ public class GoogleClient {
         return null;
     }
 
-    private String callGoogle(String latitude, String longitude, String address ) throws IOException{
+    private String callGoogle(String latitude, String longitude, String address) throws IOException {
         return latitude != null ? geocodeClient.requestGeocode(latitude, longitude) : geocodeClient.requestGeocode(address);
     }
-    private String findGeoCodeInCache(String latitude, String longitude, String address) throws SQLException{
+
+    private String findGeoCodeInCache(String latitude, String longitude, String address) throws SQLException {
         return latitude != null && !latitude.isEmpty() ? geocodeCache.get(latitude, longitude) : geocodeCache.get(address);
     }
 
     private void cacheGeoCode(GoogleResults results, String latitude, String longitude, String address, String geocode) throws IOException, SQLException {
-        if(results.getStatus().equalsIgnoreCase("OK") || results.getStatus().equalsIgnoreCase("ZERO_RESULTS")) {
-            if(latitude != null)
+        if (results.getStatus().equalsIgnoreCase("OK") || results.getStatus().equalsIgnoreCase("ZERO_RESULTS")) {
+            if (latitude != null)
                 geocodeCache.store(latitude, longitude, geocode);
             else
                 geocodeCache.store(address, geocode);
         }
-    }
-
-    public static GoogleClient init() {
-        return new GoogleClient();
     }
 
 }

@@ -12,13 +12,13 @@ import java.util.Base64;
  * Created by paul on 10.09.18.
  */
 class DAOImpl {
-    Connection connection;
     private static final String whereGeometryClause = " WHERE ST_AsText(coordinates) = ";
     private static final String whereAddressClause = " WHERE address = ";
     private static final String selectClause = " Select response from geocode ";
     private static final String selectClauseEncoded = " Select response_base64 from geocode ";
     private static final String insertGeometryClause = " insert ignore into geocode (coordinates, response_base64) ";
     private static final String insertAddressClause = " insert ignore into geocode (address, response_base64) ";
+    Connection connection;
 
     DAOImpl(Connection connection) {
         this.connection = connection;
@@ -29,6 +29,48 @@ class DAOImpl {
                 "jdbc:mysql://127.0.0.1:3306/baltimore?useUnicode=true&characterEncoding=UTF-8", "bmore", "benutzenmaschine");
 
         return new DAOImpl(conn);
+    }
+
+    private static String toValuesClause(String latitude, String longitude, String json) {
+        String point = toPoint(latitude, longitude);
+        point = point.replaceFirst("\u0020", "\u0020,");
+        String responseCompressed = compressToBase64(json);
+        return new StringBuilder(" values ").append(" ( ").append(point).append(",")
+                .append("'").append(responseCompressed).append("'").append(" )").toString();
+
+    }
+
+    private static String toValuesClause(final String address, final String json) {
+        String compressed = compressToBase64(json);
+        return new StringBuilder(" values ").append(" ( ").append("'").append(escapeIfAny(address)).append("'").append(",")
+                .append("'").append(compressed).append("'").append(" )").toString();
+
+    }
+
+    private static String compressToBase64(String json) {
+        try {
+            return Base64.getEncoder().encodeToString(json.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "UnsupportedEncodingException";
+        }
+    }
+
+    private static String escapeIfAny(String string) {
+        return string.replaceAll("'", "\\\\'");
+    }
+
+    private static String toWhereClause(String latitude, String longitude) {
+        String point = toPoint(latitude, longitude);
+        return new StringBuilder(whereGeometryClause).append("'").append(point).append("'").toString().trim();
+    }
+
+    private static String toWhereClause(String address) {
+        return new StringBuilder(whereAddressClause).append("'").append(escapeIfAny(address)).append("'").toString().trim();
+    }
+
+    private static String toPoint(String latitude, String longitude) {
+        return new StringBuilder("POINT").append("(").append(latitude).append("\u0020").append(longitude).append(")").toString();
     }
 
     public String readGeoCode(final String latitude, final String longitude) throws SQLException {
@@ -53,7 +95,6 @@ class DAOImpl {
 
     }
 
-
     public String readGeoCodeEncoded(final String address) throws SQLException {
         Statement statement = connection.createStatement();
         String query = new StringBuilder(selectClauseEncoded).append(toWhereClause(address)).toString();
@@ -72,13 +113,11 @@ class DAOImpl {
             query = new StringBuilder(insertGeometryClause).append(toValuesClause(latitude, longitude, json)).toString();
             int results = statement.executeUpdate(query);
             return results > 0 ? true : false;
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.addSuppressed(new SQLException("ERROR QUERY: " + query));
             throw e;
         }
     }
-
 
     public boolean createGeoCode(final String address, final String json) throws SQLException {
         String query = null;
@@ -93,45 +132,6 @@ class DAOImpl {
             throw e;
         }
 
-    }
-
-    private static String toValuesClause(String latitude, String longitude, String json) {
-        String point = toPoint(latitude, longitude);
-        point = point.replaceFirst("\u0020", "\u0020,");
-        String responseCompressed = compressToBase64(json);
-        return new StringBuilder(" values ").append(" ( ").append(point).append(",")
-                .append("'").append(responseCompressed).append("'").append(" )").toString();
-
-    }
-    private static String toValuesClause(final String address, final String json) {
-        String compressed = compressToBase64(json);
-        return new StringBuilder(" values ").append(" ( ").append("'").append(escapeIfAny(address)).append("'").append(",")
-                .append("'").append(compressed).append("'").append(" )").toString();
-
-    }
-    private static String compressToBase64(String json) {
-        try {
-            return Base64.getEncoder().encodeToString(json.getBytes("utf-8"));
-        }
-        catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-            return "UnsupportedEncodingException";
-        }
-    }
-
-    private static String escapeIfAny(String string){
-        return string.replaceAll("'", "\\\\'");
-    }
-    private static String toWhereClause(String latitude, String longitude) {
-        String point = toPoint(latitude, longitude);
-        return new StringBuilder(whereGeometryClause).append("'").append(point).append("'").toString().trim();
-    }
-    private static String toWhereClause(String address) {
-        return new StringBuilder(whereAddressClause).append("'").append(escapeIfAny(address)).append("'").toString().trim();
-    }
-
-    private static String toPoint(String latitude, String longitude) {
-        return new StringBuilder("POINT").append("(").append(latitude).append("\u0020").append(longitude).append(")").toString();
     }
 
     void close() throws SQLException {

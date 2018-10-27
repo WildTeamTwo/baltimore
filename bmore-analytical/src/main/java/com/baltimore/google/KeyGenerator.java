@@ -5,9 +5,8 @@ package com.baltimore.google;
  */
 class KeyGenerator {
 
-    static String generateKey(String latitude, String longitude){
+    static String generateKey(String latitude, String longitude) {
         String returnVal = latitude + longitude;
-
 
 
         return returnVal;

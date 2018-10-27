@@ -1,8 +1,8 @@
 package com.baltimore.subprogram.parking;
 
-import com.baltimore.SubProgram;
 import com.baltimore.common.data.ParkingCitation;
 import com.baltimore.google.GoogleBatch;
+import com.baltimore.subprogram.SubProgram;
 import com.baltimore.subprogram.parking.reader.BatchCitationReader;
 import com.baltimore.subprogram.parking.writer.WriterController;
 import org.joda.time.DateTime;
@@ -24,19 +24,38 @@ import static com.baltimore.common.Configuration.PARKING_HOME;
  */
 public class ParkingController implements SubProgram {
 
-    private BatchCitationReader batchCitationReader;
-
-    private GoogleBatch googleBatch;
-    private final int BATCH_MAX;
-    private final int EXCEPTION_MAX = 10;
-    private WriterController writer;
     private static final Predicate<ParkingCitation> NEIGHBORHOOD_PRESENT = p -> (p.getNeighborhood() != null);
     private static final Predicate<ParkingCitation> POLICE_DISCTRICT_PRESENT = p -> (p.getPolicedistrict() != null);
     private static final Predicate<ParkingCitation> LOCATION_MISSING = p -> (p.getLocation_2() == null && p.getLocation() == null);
+    private final int BATCH_MAX;
+    private final int EXCEPTION_MAX = 10;
+    private BatchCitationReader batchCitationReader;
+    private GoogleBatch googleBatch;
+    private WriterController writer;
+
+    private ParkingController(int batch_max) {
+        BATCH_MAX = batch_max > 0 ? batch_max : CITATION_BATCH_MAX;
+    }
+
+    private static void markTime(String msg) {
+        System.out.printf("\n%s %s\n\n", msg, DateTime.now(DateTimeZone.UTC));
+    }
+
+    public static ParkingController init(int batch_max) {
+        return new ParkingController(batch_max);
+    }
+
+    public static ParkingController init() {
+        return new ParkingController(0);
+    }
+
+    public static void main(String[] args) throws Exception {
+        ParkingController.init(0).start();
+    }
 
     @Override
     public String displayName() {
-        return "Search Internet for missing parking data.  Find Police District, City Council Member, Neighborhood, Zip Code  ";
+        return "Fix Parking Data. Find missing data (e.g Police District, City Council Member, Neighborhood, Zip Code, etc)";
     }
 
     public void start() throws IOException {
@@ -92,22 +111,6 @@ public class ParkingController implements SubProgram {
         }
     }
 
-    private static void markTime(String msg) {
-        System.out.printf("\n%s %s\n\n", msg, DateTime.now(DateTimeZone.UTC));
-    }
-
-    public static ParkingController init(int batch_max) {
-        return new ParkingController(batch_max);
-    }
-
-    public static ParkingController init() {
-        return new ParkingController(0);
-    }
-
-    private ParkingController(int batch_max) {
-        BATCH_MAX = batch_max > 0 ? batch_max : CITATION_BATCH_MAX;
-    }
-
     private void initResources() throws IOException {
         writer = WriterController.init();
         batchCitationReader = BatchCitationReader.init();
@@ -117,10 +120,6 @@ public class ParkingController implements SubProgram {
     private List<ParkingCitation> loadCitationBatch(final int current, final int total) throws IOException {
         System.out.printf("Reading citations batch %s of %s...\n", current + 1, total);
         return batchCitationReader.loadCitationBatch();
-    }
-
-    public static void main(String[] args) throws Exception {
-        ParkingController.init(0).start();
     }
 
 }

@@ -10,14 +10,20 @@ import java.util.Set;
  * Created by paul on 21.07.18.
  */
 public class QuoteGame {
-    List <Quote> quotes = new ArrayList<Quote>();
+    List<Quote> quotes = new ArrayList<Quote>();
     String answer;
-    public QuoteGame (){
+
+    public QuoteGame() {
         buildQuotes();
         answer = null;
     }
 
-    private void buildQuotes(){
+    private static int randomNumber(int seed) {
+        Random random = new Random();
+        return random.nextInt(seed);
+    }
+
+    private void buildQuotes() {
         quotes.add(new QuoteBuilder().setAuthor("Marla Daniels").setQuote("The tree that doesn’t bend, breaks. Bend too far, and you’re already broken.").build());
         quotes.add(new QuoteBuilder().setAuthor("Carver").setQuote("Girl, you can’t even think of calling this shit a war... Wars end.").build());
         quotes.add(new QuoteBuilder().setAuthor("Slim Charles").setQuote("Don’t matter who did what to who at this point. Fact is, we went to war, and now there ain’t no going back. I mean, shit, it’s what war is, you know? Once you in it, you in it. If it’s a lie, then we fight on that lie. But we gotta fight.").build());
@@ -37,7 +43,8 @@ public class QuoteGame {
         quotes.add(new QuoteBuilder().setAuthor("Brother Mouzone").setQuote("What got you here is your word and your reputation. With that alone, you've still got an open line to New York. Without it, you're done.").build());
 
     }
-    public String getQuestion(){
+
+    public String getQuestion() {
         Quote quote = randomQoute();
         answer = quote.author;
         StringBuilder question = new StringBuilder(question(quote.quote));
@@ -49,16 +56,12 @@ public class QuoteGame {
         question.append("Enter choice (i suggest copy/paste): ");
         return question.toString();
     }
-    private Quote randomQoute(){
-        return quotes.get(randomNumber(quotes.size() ));
+
+    private Quote randomQoute() {
+        return quotes.get(randomNumber(quotes.size()));
     }
 
-    private static int randomNumber(int seed) {
-        Random random = new Random();
-        return random.nextInt(seed);
-    }
-
-    private Set<String> randomAuthors(){
+    private Set<String> randomAuthors() {
         Set<String> authors = new HashSet<String>();
         int i = 0;
         while (i < 4) {
@@ -68,10 +71,11 @@ public class QuoteGame {
         }
         return authors;
     }
-    private List<String> insertCorrectAuthor(Set<String> authors, String correctAuthor){
+
+    private List<String> insertCorrectAuthor(Set<String> authors, String correctAuthor) {
         List<String> choices = new ArrayList<String>();
 
-        if(authors.contains(correctAuthor))
+        if (authors.contains(correctAuthor))
             authors.remove(correctAuthor);
 
         choices.addAll(authors);
@@ -82,39 +86,42 @@ public class QuoteGame {
     }
 
 
-    private String question(String text){
+    private String question(String text) {
         return String.format("What character in The Wire (HBO) said this statement - %s", text);
     }
-    private String authorsToString(List<String> authors){
+
+    private String authorsToString(List<String> authors) {
         StringBuilder builder = new StringBuilder();
-        for(String author : authors) {
+        for (String author : authors) {
             builder.append(author).append("\n");
         }
 
         return builder.toString();
     }
 
-    class Quote{
+    class Quote {
         String author;
         String quote;
     }
 
-    class QuoteBuilder{
+    class QuoteBuilder {
         Quote q;
-        QuoteBuilder (){
+
+        QuoteBuilder() {
             q = new Quote();
         }
-        QuoteBuilder setAuthor(String author){
+
+        QuoteBuilder setAuthor(String author) {
             q.author = author;
             return this;
         }
 
-        QuoteBuilder setQuote(String quote){
+        QuoteBuilder setQuote(String quote) {
             q.quote = quote;
             return this;
         }
 
-        Quote build(){
+        Quote build() {
             return q;
         }
 

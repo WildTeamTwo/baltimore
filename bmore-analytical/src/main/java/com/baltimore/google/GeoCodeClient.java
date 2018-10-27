@@ -24,7 +24,7 @@ public class GeoCodeClient {
 
 
     public String requestGeocode(String address) throws IOException {
-        if(Objects.isNull(address)){
+        if (Objects.isNull(address)) {
             return null;
         }
         try {
@@ -39,8 +39,8 @@ public class GeoCodeClient {
     }
 
     public String requestGeocode(String latitude, String longitude) throws IOException {
-        if(Objects.isNull(latitude) || Objects.isNull(longitude) || Double.isNaN(Double.parseDouble(latitude)) || Double.isNaN(Double.parseDouble(longitude))){
-             return null;
+        if (Objects.isNull(latitude) || Objects.isNull(longitude) || Double.isNaN(Double.parseDouble(latitude)) || Double.isNaN(Double.parseDouble(longitude))) {
+            return null;
         }
         try {
             HttpResponse response = request(encodeURL(latitude, longitude));
@@ -53,25 +53,25 @@ public class GeoCodeClient {
 
     }
 
-    private String extractBody(HttpResponse response){
+    private String extractBody(HttpResponse response) {
         try {
             String body = EntityUtils.toString(response.getEntity());
             if (isSuccess(response, body)) {
                 EntityUtils.consumeQuietly(response.getEntity());
                 return body;
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
 
         return null;
     }
+
     private HttpResponse request(HttpGet httpGet) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpResponse response = client.execute(httpGet);
-        return  response;
+        return response;
     }
 
     private boolean isStatus200(HttpResponse response) {

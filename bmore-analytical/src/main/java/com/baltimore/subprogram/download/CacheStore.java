@@ -30,19 +30,7 @@ public class CacheStore {
         PROJECT_ROOT = HOME.resolve(PROJECT_PATH);
     }
 
-    public void store(String content, Resource resource, String page) throws IOException {
-        if (!Optional.ofNullable(content).isPresent()) {
-            return;
-        }
-        Path fullPath = filePath(resource, page);
-        makeResourceDirectory(resource);
-        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(fullPath.toFile(), false));
-        os.write(content.getBytes());
-        os.flush();
-        os.close();
-    }
-
-    private static Path filePath(Resource resource, String page){
+    private static Path filePath(Resource resource, String page) {
         return fileToPath(resource.path, DATA_FILE_NAME + page);
     }
 
@@ -55,24 +43,37 @@ public class CacheStore {
         return Files.exists(path);
     }
 
-
     private static Path directoryToPath(String path) {
         return PROJECT_ROOT.resolve(path).resolve(VERSION);
     }
+
     private static Path fileToPath(String path, String fileName) {
         return directoryToPath(path).resolve(fileName);
     }
 
-    private static void makeResourceDirectory(Resource resource) throws IOException{
+    private static void makeResourceDirectory(Resource resource) throws IOException {
         createCacheRootDirectory();
         createResourcePath(resource);
     }
-    private static void createCacheRootDirectory() throws IOException{
+
+    private static void createCacheRootDirectory() throws IOException {
         createDirectory(PROJECT_ROOT);
     }
 
-    private static void createResourcePath(Resource resource) throws IOException{
-        createDirectory( directoryToPath(resource.path) );
+    private static void createResourcePath(Resource resource) throws IOException {
+        createDirectory(directoryToPath(resource.path));
+    }
+
+    public void store(String content, Resource resource, String page) throws IOException {
+        if (!Optional.ofNullable(content).isPresent()) {
+            return;
+        }
+        Path fullPath = filePath(resource, page);
+        makeResourceDirectory(resource);
+        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(fullPath.toFile(), false));
+        os.write(content.getBytes());
+        os.flush();
+        os.close();
     }
 
 }

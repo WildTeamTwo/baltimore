@@ -15,46 +15,46 @@ public class GeoCode {
     private String postalCodeSuffix;
     private String nearbyPointOfInterests;
 
-    private GeoCode(){
+    private GeoCode() {
 
     }
 
-    public static GeoCode init(){
+    public static GeoCode init() {
         return new GeoCode();
     }
-    public static GeoCode toGeoCode(GoogleResults.GoogleResult [] results){
+
+    public static GeoCode toGeoCode(GoogleResults.GoogleResult[] results) {
         GeoCode geoCode = init();
-        if(results == null)
-        {
+        if (results == null) {
             return null;
         }
 
-        for(GoogleResults.GoogleResult result : results){
-            for( AddressComponent c : result.getAddress_components()){
-                if ( AddressComponent.isPoliticalNeighborhood(c)  ){
+        for (GoogleResults.GoogleResult result : results) {
+            for (AddressComponent c : result.getAddress_components()) {
+                if (AddressComponent.isPoliticalNeighborhood(c)) {
                     geoCode.setPoliticalNeighborhood(c.getLong_name());
                 }
-                if ( AddressComponent.isStreetNumber(c)  ){
+                if (AddressComponent.isStreetNumber(c)) {
                     geoCode.setStreetNumber(c.getLong_name());
                 }
 
-                if ( AddressComponent.isRoute(c)  ){
+                if (AddressComponent.isRoute(c)) {
                     geoCode.setRoute(c.getLong_name());
                 }
 
-                if ( AddressComponent.isPostalCode(c)  ){
+                if (AddressComponent.isPostalCode(c)) {
                     geoCode.setPostalCode(c.getLong_name());
                 }
 
-                if ( AddressComponent.isPostalSuffix(c)  ){
+                if (AddressComponent.isPostalSuffix(c)) {
                     geoCode.setPostalCodeSuffix(c.getLong_name());
                 }
 
-                if ( AddressComponent.isNearbyPointOfInterest(c)  ){
+                if (AddressComponent.isNearbyPointOfInterest(c)) {
                     geoCode.setNearbyPointOfInterests(c.getLong_name());
                 }
 
-                if ( AddressComponent.isCity(c)  ){
+                if (AddressComponent.isCity(c)) {
                     geoCode.setCity(c.getLong_name());
                 }
             }

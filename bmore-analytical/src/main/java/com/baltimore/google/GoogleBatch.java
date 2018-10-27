@@ -22,6 +22,10 @@ public class GoogleBatch {
         google = GoogleClient.init();
     }
 
+    public static GoogleBatch init() throws IOException {
+        return new GoogleBatch();
+    }
+
     public void crossReferenceWithGoogle(List<? extends Googleable> elements) throws IOException {
         System.out.println(elements.size() != 0 ? String.format("\tGoogle Neighborhood. Police district. City Council Member. Analyzing %s police and city events...", elements.size()) : "\tBatch did not contain data required to cross reference. Skipping. ");
 
@@ -88,10 +92,6 @@ public class GoogleBatch {
         if (batch.size() % 50 == 0) {
             System.out.print("\u25A1\u25A0");
         }
-    }
-
-    public static GoogleBatch init() throws IOException {
-        return new GoogleBatch();
     }
 
 }

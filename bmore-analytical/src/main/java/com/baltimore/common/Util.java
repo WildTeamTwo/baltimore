@@ -14,13 +14,12 @@ public class Util {
     }
 
 
-    public static boolean arrayHas(String[] arr, String ... keys ) throws IndexOutOfBoundsException{
+    public static boolean arrayHas(String[] arr, String... keys) throws IndexOutOfBoundsException {
         List targets = Arrays.asList(keys);
-        List list =  Arrays.asList(arr);
+        List list = Arrays.asList(arr);
         return list.containsAll(targets);
 
     }
-
 
 
 }

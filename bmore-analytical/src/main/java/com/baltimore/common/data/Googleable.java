@@ -6,9 +6,13 @@ package com.baltimore.common.data;
 public interface Googleable {
 
     public String getLatitude();
+
     public String getLongitude();
+
     public String getAddress();
-    public void setGoogleResults(GoogleResults r);
+
     public GoogleResults getGoogleResults();
+
+    public void setGoogleResults(GoogleResults r);
 }
 

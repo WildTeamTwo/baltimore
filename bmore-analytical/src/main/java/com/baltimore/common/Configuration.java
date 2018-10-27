@@ -29,7 +29,7 @@ public class Configuration {
 
     }
 
-    private static Path createStandardPath(String dir){
+    private static Path createStandardPath(String dir) {
         return PROJECT_HOME.resolve(dir).resolve(VERSION);
     }
 
