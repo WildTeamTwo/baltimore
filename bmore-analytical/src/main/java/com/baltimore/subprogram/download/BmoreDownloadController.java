@@ -1,6 +1,6 @@
 package com.baltimore.subprogram.download;
 
-import static com.baltimore.common.Cosmetics.printStars;
+import static com.baltimore.common.Cosmetics.printEnding;
 import com.baltimore.common.Resource;
 import com.baltimore.subprogram.SubProgram;
 
@@ -114,15 +114,15 @@ public class BmoreDownloadController implements SubProgram {
 
 
     private void startMessage() {
-        printStars();
+        printEnding();
         System.out.println(displayName());
-        printStars();
+        printEnding();
     }
 
     private void endMessage() {
-        printStars();
+        printEnding();
         System.out.println("End " + displayName());
-        printStars();
+        printEnding();
     }
 
 }

@@ -3,19 +3,22 @@ package com.baltimore.main;
 import com.baltimore.subprogram.SubProgram;
 import com.baltimore.subprogram.download.BmoreDownloadController;
 import com.baltimore.subprogram.parking.ParkingController;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.baltimore.common.Cosmetics.printStars;
+import static com.baltimore.common.Cosmetics.printBeginning;
+import static com.baltimore.common.Cosmetics.printEnding;
 
 /**
  * Created by paul on 03.07.18.
- * <p>
- * Downloads Balitmore Open Data sets to disk.
+ *
+ * Downloads Baltimore Open Data sets to disk.
  */
+@SpringBootApplication
 public class MainController {
 
     final List<SubProgram> subPrograms;
@@ -50,10 +53,8 @@ public class MainController {
         do {
             mainController.intro();
             mainController.displayProgramNames();
-            mainController.startProgram();
-            System.out.printf("\n Quit (Y/N): ");
         }
-        while (!"N".equalsIgnoreCase(scanner.next()));
+        while (mainController.menu());
 
         mainController.outro();
     }
@@ -66,21 +67,19 @@ public class MainController {
         for (int i = 0; i < subPrograms.size(); i++) {
             builder.append(Integer.toString(i + 1)).append(" - ").append(subPrograms.get(i).displayName()).append("\n");
         }
-        builder.append("N - None \n");
+        builder.append("Q - quit \n");
         builder.append("\nEnter choice: ");
 
         return builder.toString();
     }
 
     public void intro() {
-        printStars();
-        System.out.printf("%s %20s %s %38s%s\n", "*", "\u0020", "B-More Analytical", "\u0020", "*");
-        printStars();
+        printBeginning();
         System.out.printf("Below are several programs that you can run. What would you like to do? \n\n");
 
     }
 
-    private void startProgram() throws Exception {
+    private boolean menu() throws Exception {
         Scanner scanner = new Scanner(System.in);
         String choice;
 
@@ -91,8 +90,11 @@ public class MainController {
         } else if (choice.equals("2")) {
             executeParkingController();
         }
-        System.out.print("\n");
+        else if (choice.equalsIgnoreCase("q")){
+            return false;
+        }
 
+        return true;
     }
 
     private void executeBmoreDownloadContoller() {
@@ -104,9 +106,6 @@ public class MainController {
     }
 
     private void outro() {
-        printStars();
-        System.out.printf("%s %20s %s %34s%s\n", "*", "\u0020", "End B-More Analytical", "\u0020", "*");
-        printStars();
-
+        printEnding();
     }
 }
