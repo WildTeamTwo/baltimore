@@ -5,31 +5,20 @@ import com.baltimore.subprogram.download.BmoreDownloadController;
 import com.baltimore.subprogram.parking.ParkingController;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.baltimore.common.Cosmetics.printBeginning;
 import static com.baltimore.common.Cosmetics.printEnding;
 
-/**
- * Created by paul on 03.07.18.
- *
- * Downloads Baltimore Open Data sets to disk.
- */
 @SpringBootApplication
 public class MainController {
 
     final List<SubProgram> subPrograms;
 
     private MainController() {
-        SubProgram bmoreController = BmoreDownloadController.init();
-        SubProgram parkingController = ParkingController.init();
-        List<SubProgram> subPrograms = new ArrayList<>();
-        subPrograms.add(bmoreController);
-        subPrograms.add(parkingController);
-        this.subPrograms = Collections.unmodifiableList(subPrograms);
+        this.subPrograms = Collections.unmodifiableList(Arrays.asList(BmoreDownloadController.init(), ParkingController.init()));
     }
 
     public static MainController init() {
@@ -38,27 +27,24 @@ public class MainController {
 
     public static void main(String[] args) {
         try {
-
             run();
-            System.exit(1);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void run() throws Exception{
+    private static void run() throws Exception {
         MainController mainController = MainController.init();
-        Scanner scanner = new Scanner(System.in);
-
         do {
-            mainController.intro();
-            mainController.displayProgramNames();
+            mainController.displayIntro();
+            mainController.displayMenu();
         }
-        while (mainController.menu());
-
-        mainController.outro();
+        while (mainController.promptUser());
+        mainController.displayOutro();
+        terminateProgram();
     }
-    public void displayProgramNames() {
+
+    public void displayMenu() {
         System.out.print(buildChoices());
     }
 
@@ -73,28 +59,28 @@ public class MainController {
         return builder.toString();
     }
 
-    public void intro() {
-        printBeginning();
+    public void displayIntro() {
+        displayIntro();
         System.out.printf("Below are several programs that you can run. What would you like to do? \n\n");
 
     }
 
-    private boolean menu() throws Exception {
+    private boolean promptUser() throws Exception {
         Scanner scanner = new Scanner(System.in);
-        String choice;
+        try {
+            String choice = scanner.next();
 
-        choice = scanner.next();
-
-        if (choice.equals("1")) {
-            executeBmoreDownloadContoller();
-        } else if (choice.equals("2")) {
-            executeParkingController();
+            if (choice.equals("1")) {
+                executeBmoreDownloadContoller();
+            } else if (choice.equals("2")) {
+                executeParkingController();
+            } else if (choice.equalsIgnoreCase("q")) {
+                return false;
+            }
+            return true;
+        } finally {
+            scanner.close();
         }
-        else if (choice.equalsIgnoreCase("q")){
-            return false;
-        }
-
-        return true;
     }
 
     private void executeBmoreDownloadContoller() {
@@ -105,7 +91,12 @@ public class MainController {
         ParkingController.init().start();
     }
 
-    private void outro() {
+    private static void terminateProgram() {
+        //todo: release resources
+        System.exit(1);
+    }
+
+    private void displayOutro() {
         printEnding();
     }
 }

@@ -8,7 +8,7 @@ public interface SubProgram {
 
     void start() throws Exception;
 
-    void destroy();
+    void releaseResources();
 
     void end();
 
