@@ -19,11 +19,11 @@
     <properties>
         <guavaVersion>23.0</guavaVersion>
         <lombokVersion>1.16.20</lombokVersion>
-        <jacksonVersion>2.9.1</jacksonVersion>
-        <httpClientVersion>4.3.3</httpClientVersion>
+        <jacksonVersion>2.9.8</jacksonVersion>
+        <httpClientVersion>4.3.6</httpClientVersion>
         <jodaTimeVersion>2.9.4</jodaTimeVersion>
         <springbootversion>2.1.0.RELEASE</springbootversion>
-        <springVersion>5.0.0.RELEASE</springVersion>
+        <springVersion>5.0.7.RELEASE</springVersion>
     </properties>
 
     <dependencies>
@@ -173,9 +173,6 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
                     </execution>
                 </executions>
                 <configuration>

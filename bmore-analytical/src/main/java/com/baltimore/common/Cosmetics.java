@@ -6,7 +6,7 @@ package com.baltimore.common;
 public class Cosmetics {
 
 
-    public static void displayIntro() {
+    public static void intro() {
         System.out.println("#           *                                                                             \n" +
                 "#     (   (  `                       (                  (           )                (    \n" +
                 "#   ( )\\  )\\))(        (      (      )\\              )  )\\ (     ( /( (           )  )\\   \n" +
@@ -18,7 +18,7 @@ public class Cosmetics {
                 "#                                                          |__/                           ");
     }
 
-    public static void printEnding() {
+    public static void outro() {
         System.out.println("#           *                                                                        \n" +
                 "#     (   (  `                                          )                       (    \n" +
                 "#   ( )\\  )\\))(        (      (    (       )         ( /( (                  )  )\\   \n" +

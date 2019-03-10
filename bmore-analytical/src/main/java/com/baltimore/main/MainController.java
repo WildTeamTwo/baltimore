@@ -9,28 +9,28 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.baltimore.common.Cosmetics.printEnding;
+import static com.baltimore.common.Cosmetics.intro;
+import static com.baltimore.common.Cosmetics.outro;
 
 @SpringBootApplication
 public class MainController {
 
     final List<SubProgram> subPrograms;
+    final String menu;
 
     private MainController() {
         this.subPrograms = Collections.unmodifiableList(Arrays.asList(BmoreDownloadController.init(), ParkingController.init()));
+        menu = buildMenu();
     }
 
     public static MainController init() {
         return new MainController();
     }
 
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args) throws Exception{
             run();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private static void run() throws Exception {
@@ -45,35 +45,42 @@ public class MainController {
     }
 
     public void displayMenu() {
-        System.out.print(buildChoices());
+        System.out.print(buildMenu());
     }
 
-    private String buildChoices() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < subPrograms.size(); i++) {
-            builder.append(Integer.toString(i + 1)).append(" - ").append(subPrograms.get(i).displayName()).append("\n");
+    private String buildMenu() {
+        if(menu != null){
+            return menu;
         }
-        builder.append("Q - quit \n");
+        StringBuilder builder = new StringBuilder();
+        AtomicInteger count = new AtomicInteger(1);
+        subPrograms.stream().forEach( subProgram -> {
+            builder.append(Integer.toString(count.getAndIncrement()))
+                    .append(" - ")
+                    .append(subProgram.displayName()).append("\n");
+        } );
+
+        builder.append("Q - Quit \n");
         builder.append("\nEnter choice: ");
 
         return builder.toString();
     }
 
     public void displayIntro() {
-        displayIntro();
-        System.out.printf("Below are several programs that you can run. What would you like to do? \n\n");
-
+        intro();
+        System.out.printf("\nBelow are several programs. Which would you like to run? \n\n");
     }
 
     private boolean promptUser() throws Exception {
         Scanner scanner = new Scanner(System.in);
         try {
             String choice = scanner.next();
+            //TODO: implement formal menu provided by jdk
 
             if (choice.equals("1")) {
-                executeBmoreDownloadContoller();
+                subPrograms.get(0).start();
             } else if (choice.equals("2")) {
-                executeParkingController();
+                subPrograms.get(1).start();
             } else if (choice.equalsIgnoreCase("q")) {
                 return false;
             }
@@ -83,20 +90,12 @@ public class MainController {
         }
     }
 
-    private void executeBmoreDownloadContoller() {
-        BmoreDownloadController.init().start();
-    }
-
-    private void executeParkingController() throws Exception {
-        ParkingController.init().start();
-    }
-
     private static void terminateProgram() {
         //todo: release resources
         System.exit(1);
     }
 
     private void displayOutro() {
-        printEnding();
+        outro();
     }
 }

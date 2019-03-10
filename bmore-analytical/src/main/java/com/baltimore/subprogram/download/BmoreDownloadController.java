@@ -1,6 +1,6 @@
 package com.baltimore.subprogram.download;
 
-import static com.baltimore.common.Cosmetics.printEnding;
+import static com.baltimore.common.Cosmetics.outro;
 import com.baltimore.common.Resource;
 import com.baltimore.subprogram.SubProgram;
 
@@ -103,7 +103,7 @@ public class BmoreDownloadController implements SubProgram {
     }
 
     @Override
-    public void destroy() {
+    public void releaseResources() {
         throw new UnsupportedOperationException();
     }
 
@@ -114,15 +114,15 @@ public class BmoreDownloadController implements SubProgram {
 
 
     private void startMessage() {
-        printEnding();
+        outro();
         System.out.println(displayName());
-        printEnding();
+        outro();
     }
 
     private void endMessage() {
-        printEnding();
+        outro();
         System.out.println("End " + displayName());
-        printEnding();
+        outro();
     }
 
 }

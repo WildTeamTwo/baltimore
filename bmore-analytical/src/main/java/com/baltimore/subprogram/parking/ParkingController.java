@@ -24,7 +24,7 @@ import static com.baltimore.common.Configuration.PARKING_HOME;
  */
 public class ParkingController implements SubProgram {
 
-    private static final Predicate<ParkingCitation> NEIGHBORHOOD_PRESENT = p -> (p.getNeighborhood() != null);
+                private static final Predicate<ParkingCitation> NEIGHBORHOOD_PRESENT = p -> (p.getNeighborhood() != null);
     private static final Predicate<ParkingCitation> POLICE_DISCTRICT_PRESENT = p -> (p.getPolicedistrict() != null);
     private static final Predicate<ParkingCitation> LOCATION_MISSING = p -> (p.getLocation_2() == null && p.getLocation() == null);
     private final int BATCH_MAX;
@@ -84,7 +84,7 @@ public class ParkingController implements SubProgram {
     }
 
     @Override
-    public void destroy() {
+    public void releaseResources() {
         throw new UnsupportedOperationException();
     }
 
