@@ -11,16 +11,18 @@ The team uses Maven to build the application and handle dependencies. In additio
 
 # Run as a Spring Boot application
 Navigate to the project home direcorty and run the spring boot plugin.
+```
 ./mvnw spring-boot:run
-
+```
 # Run as a JAR
 Download the source run the commands below:
+```
 > cd {project_home_directory}/bmore-analytical
 > ./mvnw install 
 > java -jar target/bmore-analytical-1.0-SNAPSHOT-jar-with-dependencies.jar
-
+```
 # Setup and Test Instructions
 The application requires:
-1) Google API account
-2) MySQL database 
+- [x] Google API account
+- [x] MySQL database 
 
