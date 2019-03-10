@@ -12,7 +12,8 @@ The team uses Maven to build the application and handle dependencies. In additio
 # Run as a Spring Boot application
 Navigate to the project home direcorty and run the spring boot plugin.
 ```
-./mvnw spring-boot:run
+> cd /{project_home}/bmore-analytical
+> ./mvnw spring-boot:run
 ```
 # Run as a JAR
 Download the source run the commands below:
