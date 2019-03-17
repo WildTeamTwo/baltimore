@@ -3,6 +3,11 @@ package com.baltimore.main;
 import com.baltimore.subprogram.SubProgram;
 import com.baltimore.subprogram.download.BmoreDownloadController;
 import com.baltimore.subprogram.parking.ParkingController;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Arrays;
@@ -15,35 +20,49 @@ import static com.baltimore.common.Cosmetics.intro;
 import static com.baltimore.common.Cosmetics.outro;
 
 @SpringBootApplication
-public class MainController {
+public class Application {
 
     final List<SubProgram> subPrograms;
     final String menu;
 
-    private MainController() {
+    private Application() {
         this.subPrograms = Collections.unmodifiableList(Arrays.asList(BmoreDownloadController.init(), ParkingController.init()));
         menu = buildMenu();
     }
 
-    public static MainController init() {
-        return new MainController();
+    public static Application init() {
+        return new Application();
     }
 
     public static void main(String[] args) throws Exception{
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse( initOptions(), args );
+        if(cmd.getArgList().size() != 0){
+            runOption(cmd.getOptions());
+        }
+        else {
             run();
+        }
+        terminate();
     }
 
     private static void run() throws Exception {
-        MainController mainController = MainController.init();
+        Application mainController = Application.init();
         do {
             mainController.displayIntro();
             mainController.displayMenu();
         }
         while (mainController.promptUser());
         mainController.displayOutro();
-        terminateProgram();
     }
 
+    private static void runOption(Option[] options) throws Exception {
+        Application mainController = Application.init();
+        mainController.displayIntro();
+        mainController.runProgram();
+        mainController.displayOutro();
+
+    }
     public void displayMenu() {
         System.out.print(buildMenu());
     }
@@ -90,11 +109,21 @@ public class MainController {
         }
     }
 
-    private static void terminateProgram() {
+    private void runProgram() throws Exception{
+        subPrograms.get(0).start();
+    }
+    private static void terminate() {
         //todo: release resources
         System.exit(1);
     }
 
+    private static Options initOptions(){
+        final Options options = new Options();
+        options.addOption(Option.builder().argName("d").longOpt("download").hasArg(true).desc("download data set [arrest|parking]").build());
+        options.addOption(Option.builder().argName("m").longOpt("months").hasArg(true).desc("months of data to retrieve").build());
+        options.addOption(Option.builder().argName("y").longOpt("years").hasArg(true).desc("years of data to retrieve").build());
+        return options;
+    }
     private void displayOutro() {
         outro();
     }

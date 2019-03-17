@@ -1,8 +1,8 @@
 package com.baltimore.subprogram.download;
 
-import static com.baltimore.common.Cosmetics.outro;
 import com.baltimore.common.Resource;
 import com.baltimore.subprogram.SubProgram;
+import com.google.common.base.Enums;
 
 import java.util.Scanner;
 
@@ -11,19 +11,21 @@ import java.util.Scanner;
  */
 public class BmoreDownloadController implements SubProgram {
 
-    private BmoreDownloadController() {
+    private final String menu;
 
+    private BmoreDownloadController() {
+        menu = buildChoices();
     }
 
     public static BmoreDownloadController init() {
         return new BmoreDownloadController();
     }
 
-    private static void chooseBmoreDataToDownload() throws Exception {
-        promptUser(getChoices());
+    private void promptUser() throws Exception {
+        promptUserX(menu);
     }
 
-    private static void promptUser(String choices) throws Exception {
+    private void promptUser(String choices) throws Exception {
         Scanner scanner = new Scanner(System.in);
         String choice;
 
@@ -32,17 +34,17 @@ public class BmoreDownloadController implements SubProgram {
             choice = scanner.next();
 
             if (choice.equals("1")) {
-                downloadData(Resource.PROPERTY);
+                download(Resource.PROPERTY);
             } else if (choice.equals("2")) {
-                downloadData(Resource.ARREST);
+                download(Resource.ARREST);
             } else if (choice.equals("3")) {
-                downloadData(Resource.VICTIM);
+                download(Resource.VICTIM);
             } else if (choice.equals("4")) {
-                downloadData(Resource.THREE11);
+                download(Resource.THREE11);
             } else if (choice.equals("5")) {
-                downloadData(Resource.PARKING);
+                download(Resource.PARKING);
             } else if (choice.equals("6")) {
-                downloadData(Resource.LIQUOR);
+                download(Resource.LIQUOR);
             } else if (choice.equalsIgnoreCase("A")) {
                 downloadData();
             }
@@ -53,28 +55,47 @@ public class BmoreDownloadController implements SubProgram {
 
     }
 
+    private void promptUserX(String choices) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        String choice;
+
+        do {
+            System.out.print(choices);
+            choice = scanner.next();
+            Resource resource = Enums.getIfPresent(Resource.class, choice.toUpperCase()).or(Resource.DEFAULT);
+            if(!choice.equalsIgnoreCase("N") && resource == Resource.DEFAULT){
+                System.out.println("Did not recognize this choice. Try again");
+            }
+            else {
+                download(resource);
+            }
+            System.out.print("\n");
+        }
+        while (!choice.equalsIgnoreCase("N"));
+
+    }
     private static int promptUserMaxPages() throws Exception{
         System.out.print("How many pages would you like to download (Default is 1000 pages which is ~550MB) : ");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
 
-    private static String getChoices() {
+    private static String buildChoices() {
 
         StringBuilder builder = new StringBuilder();
         Resource[] resources = Resource.values();
-        builder.append("\nWhich data set would you like to download. Enter a number:\n");
+        builder.append("\nWhich data set would you like to download. Enter the name:\n");
         for (int i = 0; i < resources.length; i++) {
             builder.append(Integer.toString(i + 1)).append(" - ").append(resources[i].name()).append("\n");
         }
         builder.append("A  - All \n");
         builder.append("N  - None \n");
-        builder.append("Enter choice: ");
+        builder.append("Enter name: ");
 
         return builder.toString();
     }
 
-    private static void downloadData(Resource resource) throws Exception {
+    private static void download(Resource resource) throws Exception {
         int pageLimit = promptUserMaxPages();
         System.out.printf("Refreshing data set...");
         BaltimoreAPI.init(pageLimit).downloadResource(resource);
@@ -87,42 +108,23 @@ public class BmoreDownloadController implements SubProgram {
 
     @Override
     public String displayName() {
-        return "Get Baltimore Data";
+        return "Download Raw Data From Baltimore Open Data API";
     }
 
     @Override
     public void start() {
         try {
             startMessage();
-            chooseBmoreDataToDownload();
-            end();
+            promptUser();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    @Override
-    public void releaseResources() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void end() {
-        endMessage();
-    }
-
-
     private void startMessage() {
-        outro();
         System.out.println(displayName());
-        outro();
     }
 
-    private void endMessage() {
-        outro();
-        System.out.println("End " + displayName());
-        outro();
-    }
 
 }

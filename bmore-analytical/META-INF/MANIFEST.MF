@@ -12,5 +12,5 @@ Class-Path: target/classes/soda-api-java-0.9.12.jar target/classes/jod
  t/classes/animal-sniffer-annotations-1.14.jar
 Created-By: Apache Maven 3.5.3
 Build-Jdk: 1.8.0_171
-Main-Class: com.baltimore.main.MainController
+Main-Class: com.baltimore.main.Application
 
