@@ -1,6 +1,9 @@
 # Purpose
 BMore Analytical downloads public data, cross references with better data sets, and runs more insightful analytics than the [Baltimore Open Data API](https://data.baltimorecity.gov/) is able to provide.
 
+# System Design
+![System Design](/bmore-analytical/system-design.jpg)
+
 # Why 
 Let's be clear we do this for the people of Baltimore. We want to look at Baltimore through every lens possible.  We want to report everything from courtroom trends to social trends. We are interested in anything that impacts quality of life for baltimoreans. Whatever the data set, whatever the trend we want to measure it's impact.
 
