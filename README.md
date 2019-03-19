@@ -5,9 +5,7 @@ BMore Analytical downloads public data, cross references with better data sets, 
 ![System Design](/bmore-analytical/system-design.jpg)
 
 # Why 
-Let's be clear we do this for the people of Baltimore. We want to look at Baltimore through every lens possible.  We want to report everything from courtroom trends to social trends. We are interested in anything that impacts quality of life for baltimoreans. Whatever the data set, whatever the trend we want to measure it's impact.
-
-These tools enable us to provide smart insights to residents.  In addition, it allows us to detect political trends, predict outcomes (to a reasonable degree), detect locations of bias, find opportunities of self and community-improvement, and find pockets of corruption.
+Let's be clear we do this for the culture. These tools will provide smart data into bias, corruption, misappropriation of funds, and political trends. We want to provide the low and middle income class first class intelligence into their local politics.
 
 # Build Instructions
 The team uses Maven to build the application and handle dependencies. In addition Maven Wrapper is used align the team to a common build tool.
