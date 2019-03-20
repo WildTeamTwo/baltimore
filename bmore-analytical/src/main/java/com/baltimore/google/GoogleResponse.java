@@ -1,6 +1,6 @@
 package com.baltimore.google;
 
-import com.baltimore.common.data.GoogleResults;
+import com.baltimore.model.GoogleResults;
 
 /**
  * Created by paul on 13.09.18.

@@ -1,7 +1,7 @@
 package com.baltimore.google;
 
-import com.baltimore.common.data.GoogleResults;
-import com.baltimore.common.data.Googleable;
+import com.baltimore.model.GoogleResults;
+import com.baltimore.model.Googleable;
 
 import java.io.IOException;
 import java.util.ArrayList;

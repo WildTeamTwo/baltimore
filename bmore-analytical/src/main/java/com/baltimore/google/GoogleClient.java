@@ -3,7 +3,7 @@ package com.baltimore.google;
 
 import com.baltimore.common.Configuration;
 import com.baltimore.common.JsonMap;
-import com.baltimore.common.data.GoogleResults;
+import com.baltimore.model.GoogleResults;
 
 import java.io.IOException;
 import java.sql.SQLException;

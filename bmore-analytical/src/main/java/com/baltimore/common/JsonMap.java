@@ -1,6 +1,6 @@
 package com.baltimore.common;
 
-import com.baltimore.common.data.GoogleResults;
+import com.baltimore.model.GoogleResults;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
