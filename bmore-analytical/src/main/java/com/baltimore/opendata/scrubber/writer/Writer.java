@@ -1,4 +1,4 @@
-package com.baltimore.opendata.scrubber.parking.writer;
+package com.baltimore.opendata.scrubber.writer;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;

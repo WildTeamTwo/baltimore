@@ -8,6 +8,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,7 +17,8 @@ import java.util.Optional;
 /**
  * Created by paul on 18.07.18.
  */
-class API {
+@Component
+public class OpenDataApiHttpClient {
 
     private static final String DEFAULT_LIMIT = "1000";
 

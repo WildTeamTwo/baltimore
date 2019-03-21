@@ -1,4 +1,4 @@
-package com.baltimore.opendata.scrubber.parking.reader;
+package com.baltimore.opendata.scrubber.reader;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

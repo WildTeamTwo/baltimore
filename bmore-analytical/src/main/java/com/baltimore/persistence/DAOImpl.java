@@ -1,5 +1,8 @@
 package com.baltimore.persistence;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,23 +14,26 @@ import java.util.Base64;
 /**
  * Created by paul on 10.09.18.
  */
-class DAOImpl {
+public class DAOImpl {
     private static final String whereGeometryClause = " WHERE ST_AsText(coordinates) = ";
     private static final String whereAddressClause = " WHERE address = ";
     private static final String selectClause = " Select response from geocode ";
     private static final String selectClauseEncoded = " Select response_base64 from geocode ";
     private static final String insertGeometryClause = " insert ignore into geocode (coordinates, response_base64) ";
     private static final String insertAddressClause = " insert ignore into geocode (address, response_base64) ";
-    Connection connection;
+    private Connection connection;
 
     DAOImpl(Connection connection) {
         this.connection = connection;
     }
-
-    static DAOImpl init() throws SQLException {
+    public static DAOImpl init(String host, String port) throws SQLException{
+        Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://" + host + ":" + port +"/baltimore?useUnicode=true&characterEncoding=UTF-8", "bmore", "benutzenmaschine");
+        return new DAOImpl(conn);
+    }
+    public static DAOImpl init() throws SQLException {
         Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/baltimore?useUnicode=true&characterEncoding=UTF-8", "bmore", "benutzenmaschine");
-
         return new DAOImpl(conn);
     }
 

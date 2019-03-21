@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * Created by paul on 13.08.18.
  */
-public class GeoCodeClient {
+public class GeoCodeHttpClient {
 
     private final String GeoCode_URL = "https://maps.googleapis.com/maps/api/geocode/json";
     private final String API_KEY = "AIzaSyAw1ChJmKIWkbnpDqUKh_INNGpIDIJyenc";

@@ -1,4 +1,4 @@
-package com.baltimore.opendata.scrubber.parking.reader;
+package com.baltimore.opendata.scrubber.reader;
 
 import com.baltimore.common.Configuration;
 import com.baltimore.common.Filezee;

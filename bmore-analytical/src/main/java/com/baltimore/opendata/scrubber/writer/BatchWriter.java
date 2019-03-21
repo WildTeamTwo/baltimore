@@ -1,4 +1,4 @@
-package com.baltimore.opendata.scrubber.parking.writer;
+package com.baltimore.opendata.scrubber.writer;
 
 import com.baltimore.common.Configuration;
 import com.baltimore.common.Filezee;
@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * Created by paul on 13.08.18.
  */
-public class WriterController {
+public class BatchWriter {
 
     private static final String DIRECTORY = "geocode/";
     private static final String ERROR_DIRECTORY = "error/";
@@ -45,12 +45,12 @@ public class WriterController {
     private Writer writer;
     private Writer errWriter;
 
-    private WriterController() {
+    private BatchWriter() {
 
     }
 
-    public static WriterController init() throws IOException {
-        WriterController writerController = new WriterController();
+    public static BatchWriter init() throws IOException {
+        BatchWriter writerController = new BatchWriter();
         writerController.initFileSystem();
         return writerController;
     }
@@ -112,7 +112,7 @@ public class WriterController {
             cityCouncil = Neighborhood.cityCouncilOf(geo.getPoliticalNeighborhood());
         }
 
-        final String formatted = new StringBuilder(parkingCitation.getCitation()).
+        return new StringBuilder(parkingCitation.getCitation()).
                 append(tab).
                 append(parkingCitation.getLocation_2().getLatitude()).
                 append(tab).
@@ -144,7 +144,6 @@ public class WriterController {
                 append("\n").
                 toString();
 
-        return formatted;
     }
 
     private GeoCode initGeoCode(GoogleResults results) {

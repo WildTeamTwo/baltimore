@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Created by paul on 18.07.18.
  */
-public class CacheStore {
+public class FileSystemStore {
 
     private static final List<Resource> resourceQueue = Arrays.asList(Resource.values());
 

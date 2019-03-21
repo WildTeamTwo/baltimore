@@ -3,6 +3,7 @@ package com.baltimore.opendata.consumer;
 import com.baltimore.common.Resource;
 import com.baltimore.opendata.Task;
 import com.google.common.base.Enums;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -11,11 +12,13 @@ import java.util.Scanner;
  * Created by paul on 26.10.18.
  */
 @Component
-public class BaltimoreConsumer implements Task {
+public class BaltimoreDataConsumer implements Task {
 
     private final String menu;
+    private OpenDataAPIClient apiClient;
 
-    public BaltimoreConsumer() {
+    public BaltimoreDataConsumer(@Autowired OpenDataAPIClient client) {
+        apiClient = client;
         menu = buildChoices();
     }
 
@@ -45,18 +48,16 @@ public class BaltimoreConsumer implements Task {
         return builder.toString();
     }
 
-    private static void download(Resource resource) throws Exception {
+    private void download(Resource resource) throws Exception {
         if(resource == null){
             System.out.printf("\nFound no dataset matching that name. Try again\n");
             return;
         }
-        System.out.printf("Downloading data set...");
-        BaltimoreAPI.init(promptUserMaxPages()).downloadResource(resource);
-        System.out.println("Download complete.");
+        apiClient.downloadResource(resource);
     }
 
 
-    private static int promptUserMaxPages() throws Exception{
+    private static int promptMaxPages() throws Exception{
         System.out.print("How many pages would you like to download (Default is 1000 pages which is ~550MB) : ");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();

@@ -6,17 +6,17 @@ import java.util.Base64;
 /**
  * Created by paul on 10.09.18.
  */
-public class DAO {
+public class Cache {
 
     DAOImpl daoImpl;
 
-    private DAO(DAOImpl daoImpl) {
+    public Cache(DAOImpl daoImpl){
         this.daoImpl = daoImpl;
     }
 
-    public static DAO init() {
+    public static Cache init() {
         try {
-            return new DAO(DAOImpl.init());
+            return new Cache(DAOImpl.init());
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

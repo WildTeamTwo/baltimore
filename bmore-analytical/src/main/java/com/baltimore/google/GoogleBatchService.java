@@ -2,6 +2,8 @@ package com.baltimore.google;
 
 import com.baltimore.model.GoogleResults;
 import com.baltimore.model.Googleable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,16 +16,13 @@ import static com.baltimore.common.Configuration.GOOGLE_CALL_LIMIT;
  * Created by paul on 19.09.18.
  */
 
-public class GoogleBatch {
+@Component
+public class GoogleBatchService {
 
     private GoogleClient google;
 
-    private GoogleBatch() throws IOException {
-        google = GoogleClient.init();
-    }
-
-    public static GoogleBatch init() throws IOException {
-        return new GoogleBatch();
+    public GoogleBatchService(@Autowired GoogleClient googleClient) throws IOException {
+        google = googleClient;
     }
 
     public void crossReferenceWithGoogle(List<? extends Googleable> elements) throws IOException {

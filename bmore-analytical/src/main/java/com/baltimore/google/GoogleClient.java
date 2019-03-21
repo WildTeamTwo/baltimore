@@ -4,6 +4,7 @@ package com.baltimore.google;
 import com.baltimore.common.Configuration;
 import com.baltimore.common.JsonMap;
 import com.baltimore.model.GoogleResults;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,16 +14,12 @@ import java.sql.SQLException;
  */
 public class GoogleClient {
 
-    GeoCodeClient geocodeClient;
+    GeoCodeHttpClient geocodeHttpClient;
     GeoCodeCache geocodeCache;
 
-    private GoogleClient() {
-        geocodeClient = new GeoCodeClient();
-        geocodeCache = GeoCodeCache.init();
-    }
-
-    public static GoogleClient init() {
-        return new GoogleClient();
+    public GoogleClient(@Autowired GeoCodeHttpClient geocodeHttpClient, @Autowired GeoCodeCache geocodeCache) {
+        this.geocodeHttpClient = geocodeHttpClient;
+        this.geocodeCache = geocodeCache;
     }
 
     public GoogleResults requestGeocode(String latitude, String longitude, String address) throws IOException {
@@ -45,7 +42,7 @@ public class GoogleClient {
     }
 
     private String callGoogle(String latitude, String longitude, String address) throws IOException {
-        return latitude != null ? geocodeClient.requestGeocode(latitude, longitude) : geocodeClient.requestGeocode(address);
+        return latitude != null ? geocodeHttpClient.requestGeocode(latitude, longitude) : geocodeHttpClient.requestGeocode(address);
     }
 
     private String findGeoCodeInCache(String latitude, String longitude, String address) throws SQLException {
