@@ -38,15 +38,12 @@ public class BatchCitationReader {
         if (fileStream.hasNext()) {
             JsonReader reader = JsonReader.init(fileStream.nextFile(), 0);
             citations = reader.loadToEOF();
-            removeFile();
+            fileStream.removeCurrent();
         }
 
         return citations;
     }
 
-    private void removeFile() {
-        fileStream.removeCurrent();
-    }
 
 
 }

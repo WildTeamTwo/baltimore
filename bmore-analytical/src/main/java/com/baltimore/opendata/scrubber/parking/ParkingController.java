@@ -57,7 +57,7 @@ public class ParkingController implements Task {
             int count = 0, exceptionCount = 0;
             while (count < BATCH_MAX && exceptionCount < EXCEPTION_MAX) {
                 try {
-                    doProcessBatch(loadCitationBatch(count, BATCH_MAX));
+                    doProcessBatch(loadCitationBatch());
                     System.out.println("\tBatch complete");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -93,8 +93,7 @@ public class ParkingController implements Task {
         batchCitationReader = BatchCitationReader.init();
     }
 
-    private List<ParkingCitation> loadCitationBatch(final int current, final int total) throws IOException {
-        System.out.printf("Reading citations batch %s of %s...\n", current + 1, total);
+    private List<ParkingCitation> loadCitationBatch() throws IOException {
         return batchCitationReader.loadCitationBatch();
     }
 

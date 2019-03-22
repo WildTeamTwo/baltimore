@@ -81,7 +81,7 @@ class JsonReader {
         List<String> elements = new ArrayList<String>();
         String json_objects;
         byte[] contents = new byte[buffer_size];
-        long bytesRead = 0;
+        int bytesRead = 0;
         while (bytesRead != -1) {
             //Todo - no longer a need to track bytesread or bytes used.
             bytesRead = bufferedStream.read(contents, 0, buffer_size);

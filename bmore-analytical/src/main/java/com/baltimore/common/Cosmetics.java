@@ -1,5 +1,8 @@
 package com.baltimore.common;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,6 +42,10 @@ public class Cosmetics {
                 "#   | _ \\| |\\/| |/ _ \\| '_|/ -_)  | _| | '  \\()/ _ \\|  _| | |/ _ \\| ' \\))/ _` || |   \n" +
                 "#   |___/|_|  |_|\\___/|_|  \\___|  |___||_|_|_| \\___/ \\__| |_|\\___/|_||_| \\__,_||_|   \n" +
                 "#                                                                                    ");
+    }
+
+    private static void markTime(String msg) {
+        System.out.printf("\n%s %s\n\n", msg, DateTime.now(DateTimeZone.UTC));
     }
 
     public static void main(String [] args){

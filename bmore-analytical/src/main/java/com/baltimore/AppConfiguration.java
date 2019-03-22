@@ -13,6 +13,7 @@ import com.baltimore.opendata.scrubber.reader.BatchCitationReader;
 import com.baltimore.opendata.scrubber.writer.BatchWriter;
 import com.baltimore.persistence.Cache;
 import com.baltimore.persistence.DAOImpl;
+import com.baltimore.persistence.FileSystemStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +48,7 @@ public class AppConfiguration {
 
     @Bean
     public BaltimoreDataConsumer consumer(){
-        return new BaltimoreDataConsumer(new OpenDataAPIClient());
+        return new BaltimoreDataConsumer(new OpenDataAPIClient(), new FileSystemStore());
     }
 
     @Bean
