@@ -1,5 +1,6 @@
 package com.baltimore.opendata.consumer;
 
+import com.baltimore.Exceptions.OutOfDataException;
 import com.baltimore.common.Resource;
 import org.springframework.stereotype.Component;
 
@@ -46,13 +47,25 @@ public class OpenDataAPIClient {
         return responses;
     }
 
+
+    private boolean isResponseEmpty(String response){
+        try {
+            return response == null || response.startsWith("[]");
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     public String download(Resource resource, Integer offset, Integer limit) throws Exception {
         String response = httpClient.readLive(resource, offset.toString(), limit.toString());
-        if (response == null) {
+        if (isResponseEmpty(response)) {
            return null;
         }
         return response;
     }
+
+
+
 
 
 

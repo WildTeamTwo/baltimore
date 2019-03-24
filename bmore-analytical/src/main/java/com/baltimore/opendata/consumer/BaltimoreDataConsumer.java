@@ -1,15 +1,17 @@
 package com.baltimore.opendata.consumer;
 
+import com.baltimore.Exceptions.AppSetupException;
+import com.baltimore.Exceptions.OutOfDataException;
 import com.baltimore.common.Console;
 import com.baltimore.common.Resource;
 import com.baltimore.opendata.Task;
+import com.baltimore.persistence.FileSystemSetup;
 import com.baltimore.persistence.FileSystemStore;
 import com.google.common.base.Enums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,9 +30,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p/>
  * Downloads MAX_RECORDS_PER_DOWNLOAD records per call from the Open Data API.
  * Saves MAX_SIMULTANEOUS_DOWNLOADS * MAX_BATCH FILES files to the file sytem.
- *
- * Saving 100 files takes roughly 2 minutes
- *
+ * <p/>
+ * Downloads roughly 500,000 records in 2 minutes.
+ * <p/>
  * Total # of Records = MAX_RECORDS_PER_DOWNLOAD * MAX_SIMULTANEOUS_DOWNLOADS * MAX_BATCH
  */
 @Component
@@ -39,7 +41,7 @@ public class BaltimoreDataConsumer implements Task {
     private final String menu;
     private OpenDataAPIClient openDataApiClient;
     private FileSystemStore fileSystem;
-    private static final int MAX_RECORDS_PER_DOWNLOAD = 2000;
+    private static final int MAX_RECORDS_PER_DOWNLOAD = 5000;
     private static final int MAX_SIMULTANEOUS_DOWNLOADS = 5;
     private static final int MAX_BATCH = 100;
 
@@ -54,7 +56,12 @@ public class BaltimoreDataConsumer implements Task {
         try {
             startMessage();
             promptUser(menu);
-        } catch (Exception e) {
+            FileSystemSetup.setup();
+        }
+        catch (AppSetupException e){
+            System.out.println("\n App cannot setup working directories. Cannot continue.");
+        }
+        catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -85,13 +92,18 @@ public class BaltimoreDataConsumer implements Task {
         Integer offset = 0;
         Collection<Callable<String>> tasks = new ArrayList<>();
         for (int i = 0; i < MAX_BATCH; i++) {
-            offset = initSimultaneousDownloadTasks(resource, tasks, offset);
-            List<Future<String>> results = executeDownloadsSimultaneously(tasks);
-            store(results, resource);
-            tasks.clear();
-            apiRest();
-
+            try {
+                offset = initSimultaneousDownloadTasks(resource, tasks, offset);
+                List<Future<String>> results = executeDownloadsSimultaneously(tasks);
+                store(results, resource);
+                tasks.clear();
+                apiRest();
+            } catch (OutOfDataException e) {
+                System.out.println("\nAPI returned multiple responses with no results. It is likley out of data. Stopping additional download requests.");
+                break;
+            }
         }
+
     }
 
     private Integer initSimultaneousDownloadTasks(Resource resource, Collection<Callable<String>> callables, Integer start) {
@@ -122,15 +134,19 @@ public class BaltimoreDataConsumer implements Task {
         return results;
     }
 
-    private void store(List<Future<String>> futures, Resource resource) throws IOException, InterruptedException, ExecutionException {
+    private void store(List<Future<String>> futures, Resource resource) throws OutOfDataException, IOException, InterruptedException, ExecutionException {
         Integer nextFileNumber = fileSystem.nextFileName(resource);
         AtomicInteger counter = new AtomicInteger(nextFileNumber);
         System.out.print("Saving...");
         String response;
+        int zeroResultsCount = 0;
         for (Future<String> future : futures) {
             response = future.get();
-            if(isResponseEmpty(response)){
-                continue;
+            if (response == null) {
+                zeroResultsCount++;
+            }
+            if (zeroResultsCount >= futures.size()) {
+                throw new OutOfDataException();
             }
             store(response, resource, counter.getAndIncrement());
             System.out.print(".");
@@ -145,13 +161,6 @@ public class BaltimoreDataConsumer implements Task {
         }
     }
 
-    private boolean isResponseEmpty(String response){
-        try {
-            return response.startsWith("[]");
-        }catch (Exception e){
-            return false;
-        }
-    }
     @Override
     public String displayName() {
         return "Download Raw Data From Baltimore Open Data API";
@@ -165,9 +174,9 @@ public class BaltimoreDataConsumer implements Task {
         Random random = new Random();
         Integer probability = random.nextInt(100);
 
-        if(probability < 25)
+        if (probability < 25)
             wait(2000L);
-        else if(probability < 51)
+        else if (probability < 51)
             wait(5000L);
         else
             wait(8000L);

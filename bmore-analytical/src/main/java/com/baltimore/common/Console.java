@@ -10,17 +10,14 @@ public class Console {
     public Console(){
         scanner = new Scanner(System.in);
     }
-    private final String newLine = "\n";
+    private static final String newLine = "\n";
 
-    public static String input(){
+    public static  String input(){
         return scanner.next();
     }
 
-    public void outln(String msg){
-        out(msg + newLine);
+    public static void outl(String msg){
+        System.out.print(newLine + msg + newLine);
     }
 
-    public void out(String msg){
-        System.out.print(msg);
-    }
 }

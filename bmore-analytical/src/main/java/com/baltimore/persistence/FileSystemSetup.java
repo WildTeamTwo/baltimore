@@ -1,5 +1,7 @@
 package com.baltimore.persistence;
 
+import com.baltimore.Exceptions.AppSetupException;
+import com.baltimore.common.Console;
 import com.baltimore.common.Resource;
 
 import java.io.IOException;
@@ -19,17 +21,25 @@ public class FileSystemSetup {
     private static final Path HOME;
     private static final Path PROJECT_ROOT;
     private static final List<Resource> resourceQueue = Arrays.asList(Resource.values());
-
     static {
         HOME = Paths.get(System.getProperty("user.home"));
         PROJECT_ROOT = HOME.resolve(PROJECT_PATH);
     }
 
-    public static void setup() throws IOException {
+    public static void setup() throws AppSetupException, IOException {
+        if(!fileExists(PROJECT_ROOT)){
+            Console.outl("This app will create work directories. Continue (Y/N)? ");
+            if(!"Y".equalsIgnoreCase(Console.input())) {
+                throw new AppSetupException();
+            }
+        }
         createProjectRoot();
         createDirectoryAndFile();
     }
 
+    private boolean doesProjectRootExist() throws IOException{
+        return fileExists(PROJECT_ROOT);
+    }
     private static void createProjectRoot() throws IOException {
         createDirectory(PROJECT_ROOT);
     }
