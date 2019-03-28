@@ -38,17 +38,30 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class BaltimoreDataConsumer implements Task {
 
-    private final String menu;
-    private OpenDataAPIClient openDataApiClient;
-    private FileSystemStore fileSystem;
     private static final int MAX_RECORDS_PER_DOWNLOAD = 5000;
     private static final int MAX_SIMULTANEOUS_DOWNLOADS = 5;
     private static final int MAX_BATCH = 100;
+    private final String menu;
+    private OpenDataAPIClient openDataApiClient;
+    private FileSystemStore fileSystem;
 
     public BaltimoreDataConsumer(@Autowired OpenDataAPIClient client, @Autowired FileSystemStore fileSystemStore) {
         openDataApiClient = client;
         fileSystem = fileSystemStore;
         menu = buildChoices();
+    }
+
+    private static String buildChoices() {
+        StringBuilder builder = new StringBuilder();
+        Resource[] resources = Resource.values();
+        builder.append("\nWhich data set would you like to download. Enter the name:\n");
+        for (Resource resource : resources) {
+            builder.append("- ").append(resource).append("\n");
+        }
+        builder.append("- Q / quit \n\n");
+        builder.append("Enter name: ");
+
+        return builder.toString();
     }
 
     @Override
@@ -57,11 +70,9 @@ public class BaltimoreDataConsumer implements Task {
             startMessage();
             promptUser(menu);
             FileSystemSetup.setup();
-        }
-        catch (AppSetupException e){
+        } catch (AppSetupException e) {
             System.out.println("\n App cannot setup working directories. Cannot continue.");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -181,20 +192,6 @@ public class BaltimoreDataConsumer implements Task {
         else
             wait(8000L);
     }
-
-    private static String buildChoices() {
-        StringBuilder builder = new StringBuilder();
-        Resource[] resources = Resource.values();
-        builder.append("\nWhich data set would you like to download. Enter the name:\n");
-        for (Resource resource : resources) {
-            builder.append("- ").append(resource).append("\n");
-        }
-        builder.append("- Q / quit \n\n");
-        builder.append("Enter name: ");
-
-        return builder.toString();
-    }
-
 
     private void cleanDirectory(Resource resource) throws IOException, IllegalStateException {
         if (!fileSystem.isDirEmpty(resource)) {

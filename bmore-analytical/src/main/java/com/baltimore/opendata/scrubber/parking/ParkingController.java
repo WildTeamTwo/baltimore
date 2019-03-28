@@ -1,7 +1,7 @@
 package com.baltimore.opendata.scrubber.parking;
 
-import com.baltimore.model.ParkingCitation;
 import com.baltimore.google.GoogleBatchService;
+import com.baltimore.model.ParkingCitation;
 import com.baltimore.opendata.Task;
 import com.baltimore.opendata.scrubber.reader.BatchCitationReader;
 import com.baltimore.opendata.scrubber.writer.BatchWriter;
@@ -20,7 +20,7 @@ import static com.baltimore.common.Configuration.PARKING_HOME;
 
 /**
  * Created by paul on 13.08.18.
- * <p>
+ * <p/>
  * Attempts to clean parking data by cross-referencing it with google geocode to complete data picture. Results are persisted to file.
  */
 public class ParkingController implements Task {
@@ -43,6 +43,10 @@ public class ParkingController implements Task {
 
     private ParkingController(int batch_max) {
         BATCH_MAX = batch_max > 0 ? batch_max : CITATION_BATCH_MAX;
+    }
+
+    private static void markTime(String msg) {
+        System.out.printf("\n%s %s\n\n", msg, DateTime.now(DateTimeZone.UTC));
     }
 
     @Override
@@ -95,9 +99,5 @@ public class ParkingController implements Task {
 
     private List<ParkingCitation> loadCitationBatch() throws IOException {
         return batchCitationReader.loadCitationBatch();
-    }
-
-    private static void markTime(String msg) {
-        System.out.printf("\n%s %s\n\n", msg, DateTime.now(DateTimeZone.UTC));
     }
 }

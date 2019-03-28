@@ -1,6 +1,7 @@
 package com.baltimore;
 
 import com.baltimore.common.Console;
+import com.baltimore.common.Cosmetics;
 import com.baltimore.opendata.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -10,16 +11,11 @@ import org.springframework.context.ApplicationContext;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.baltimore.common.Cosmetics.intro;
-import static com.baltimore.common.Cosmetics.outro;
-
 @SpringBootApplication
 public class Application {
 
     @Autowired
     private List<Task> tasks;
-    @Autowired
-    private Console console;
     private String menu;
 
     public static void main(String[] args) throws Exception {
@@ -28,13 +24,16 @@ public class Application {
         app.run(args);
     }
 
+    private static void terminate() {
+        System.exit(1);
+    }
+
     public void run(String[] args) throws Exception {
         do {
             displayIntro();
             displayMenu();
         }
         while (promptUser());
-        displayOutro();
         terminate();
     }
 
@@ -56,12 +55,12 @@ public class Application {
     }
 
     private void displayIntro() {
-        intro();
+        Cosmetics.intro();
         System.out.printf("\nBelow are several tasks. Which would you like to run? \n\n");
     }
 
     private boolean promptUser() throws Exception {
-        String choice = console.input();
+        String choice = Console.input();
         //TODO: implement formal menu provided by jdk
 
         if (choice.equals("1")) {
@@ -74,11 +73,4 @@ public class Application {
         return true;
     }
 
-    private static void terminate() {
-        System.exit(1);
-    }
-
-    private void displayOutro() {
-        outro();
-    }
 }

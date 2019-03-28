@@ -69,39 +69,39 @@ public class FileSystemStore {
         createDirectory(directoryToPath(resource.path));
     }
 
-    public Integer nextFileName(Resource resource) throws  IOException {
+    public Integer nextFileName(Resource resource) throws IOException {
         List<Integer> fileNames = new ArrayList<>();
         Path dir = directoryToPath(resource.path);
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(dir)) {
             for (Path path : directoryStream) {
                 try {
                     fileNames.add(new Integer(path.getFileName().toString()));
-                }catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     System.err.printf("Invalid file %s. Skipping.", path.getFileName().toString());
                 }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        if(fileNames.isEmpty()){
+        if (fileNames.isEmpty()) {
             return new Integer(1);
         }
         Collections.sort(fileNames);
 
-        return new Integer(fileNames.get(fileNames.size()-1) + 1);
+        return new Integer(fileNames.get(fileNames.size() - 1) + 1);
     }
 
     public boolean isDirEmpty(Resource resource) throws IOException {
         Path path = directoryToPath(resource.path);
-        if(!fileExists(path)){
+        if (!fileExists(path)) {
             return true;
         }
-        try(DirectoryStream<Path> dirStream = Files.newDirectoryStream(path)) {
+        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(path)) {
             return !dirStream.iterator().hasNext();
         }
     }
 
-    public void deleteDir(Resource resource) throws IOException{
+    public void deleteDir(Resource resource) throws IOException {
         Path pathToBeDeleted = directoryToPath(resource.path);
 
         Files.walk(pathToBeDeleted, FileVisitOption.FOLLOW_LINKS)

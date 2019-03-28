@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Created by paul on 21.08.18.
- * <p>
+ * <p/>
  * Class should remain immutable. So it can be optimized for multi-threading.
  */
 class JsonReader {

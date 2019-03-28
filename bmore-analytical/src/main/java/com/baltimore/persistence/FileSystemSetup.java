@@ -21,15 +21,16 @@ public class FileSystemSetup {
     private static final Path HOME;
     private static final Path PROJECT_ROOT;
     private static final List<Resource> resourceQueue = Arrays.asList(Resource.values());
+
     static {
         HOME = Paths.get(System.getProperty("user.home"));
         PROJECT_ROOT = HOME.resolve(PROJECT_PATH);
     }
 
     public static void setup() throws AppSetupException, IOException {
-        if(!fileExists(PROJECT_ROOT)){
+        if (!fileExists(PROJECT_ROOT)) {
             Console.outl("This app will create work directories. Continue (Y/N)? ");
-            if(!"Y".equalsIgnoreCase(Console.input())) {
+            if (!"Y".equalsIgnoreCase(Console.input())) {
                 throw new AppSetupException();
             }
         }
@@ -37,9 +38,6 @@ public class FileSystemSetup {
         createDirectoryAndFile();
     }
 
-    private boolean doesProjectRootExist() throws IOException{
-        return fileExists(PROJECT_ROOT);
-    }
     private static void createProjectRoot() throws IOException {
         createDirectory(PROJECT_ROOT);
     }
@@ -57,6 +55,10 @@ public class FileSystemSetup {
 
     private static boolean fileExists(Path path) {
         return Files.exists(path);
+    }
+
+    private boolean doesProjectRootExist() throws IOException {
+        return fileExists(PROJECT_ROOT);
     }
 
 }

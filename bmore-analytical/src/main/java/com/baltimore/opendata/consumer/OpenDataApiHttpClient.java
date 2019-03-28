@@ -38,7 +38,7 @@ public class OpenDataApiHttpClient {
     }
 
     public String readLive(Resource resource, String offset, String limit) throws IOException, URISyntaxException {
-        if(Strings.isEmpty(resource.url) || Strings.isEmpty(offset)){
+        if (Strings.isEmpty(resource.url) || Strings.isEmpty(offset)) {
             return null;
         }
         HttpClient client = HttpClientBuilder.create().build();

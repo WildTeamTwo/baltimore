@@ -1,10 +1,7 @@
 package com.baltimore.opendata.consumer;
 
-import com.baltimore.Exceptions.OutOfDataException;
 import com.baltimore.common.Resource;
-import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.LinkedList;
 
 /**
@@ -12,11 +9,11 @@ import java.util.LinkedList;
  */
 public class OpenDataAPIClient {
 
-    private OpenDataApiHttpClient httpClient;
     private static final int PAGE_MAX = 1000;
     private static final int PAGE_DEFAULT = 10;
     private static final Integer RESULT_LIMIT = 1000;
     private final int pages;
+    private OpenDataApiHttpClient httpClient;
 
     public OpenDataAPIClient() {
         this(PAGE_DEFAULT);
@@ -48,10 +45,10 @@ public class OpenDataAPIClient {
     }
 
 
-    private boolean isResponseEmpty(String response){
+    private boolean isResponseEmpty(String response) {
         try {
             return response == null || response.startsWith("[]");
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -59,14 +56,13 @@ public class OpenDataAPIClient {
     public String download(Resource resource, Integer offset, Integer limit) throws Exception {
         String response = httpClient.readLive(resource, offset.toString(), limit.toString());
         if (isResponseEmpty(response)) {
-           return null;
+            return null;
         }
+
+        //TODO: handle timeouts
+        //TODO: implemenet retry
         return response;
     }
-
-
-
-
 
 
 }

@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 /**
  * Created by paul on 14.08.18.
+ * TODO: Move this to a spring managed bean
  */
 public class Configuration {
 

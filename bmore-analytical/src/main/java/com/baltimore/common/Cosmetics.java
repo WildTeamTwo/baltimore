@@ -1,8 +1,5 @@
 package com.baltimore.common;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,43 +12,80 @@ import java.util.Stack;
  * Created by paul on 26.10.18.
  */
 public class Cosmetics {
-
-    static Map<Long,String> map = new HashMap<>();
+    public static String banner = "\n" +
+            ":'######:::'#######::'########::'########:'########:::'######:::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            "'##... ##:'##.... ##: ##.... ##: ##.....:: ##.... ##:'##... ##::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            " ##:::..:: ##:::: ##: ##:::: ##: ##::::::: ##:::: ##: ##:::..:::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            " ##::::::: ##:::: ##: ##:::: ##: ######::: ########::. ######:::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            " ##::::::: ##:::: ##: ##:::: ##: ##...:::: ##.. ##::::..... ##::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            " ##::: ##: ##:::: ##: ##:::: ##: ##::::::: ##::. ##::'##::: ##::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            ". ######::. #######:: ########:: ########: ##:::. ##:. ######:::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            ":......::::.......:::........:::........::..:::::..:::......::::::::::::::::::::::::::::::::::::::::::::::::\n" +
+            "::::::'########::'#######::'########::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            ":::::: ##.....::'##.... ##: ##.... ##:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            ":::::: ##::::::: ##:::: ##: ##:::: ##:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            ":::::: ######::: ##:::: ##: ########::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            ":::::: ##...:::: ##:::: ##: ##.. ##:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            ":::::: ##::::::: ##:::: ##: ##::. ##::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            ":::::: ##:::::::. #######:: ##:::. ##:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            "::::::..:::::::::.......:::..:::::..::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: \n" +
+            "'########:'##::::'##:'########:::::'######::'##::::'##:'##:::::::'########:'##::::'##:'########::'########: \n" +
+            "... ##..:: ##:::: ##: ##.....:::::'##... ##: ##:::: ##: ##:::::::... ##..:: ##:::: ##: ##.... ##: ##.....:: \n" +
+            "::: ##:::: ##:::: ##: ##:::::::::: ##:::..:: ##:::: ##: ##:::::::::: ##:::: ##:::: ##: ##:::: ##: ##::::::: \n" +
+            "::: ##:::: #########: ######:::::: ##::::::: ##:::: ##: ##:::::::::: ##:::: ##:::: ##: ########:: ######::: \n" +
+            "::: ##:::: ##.... ##: ##...::::::: ##::::::: ##:::: ##: ##:::::::::: ##:::: ##:::: ##: ##.. ##::: ##...:::: \n" +
+            "::: ##:::: ##:::: ##: ##:::::::::: ##::: ##: ##:::: ##: ##:::::::::: ##:::: ##:::: ##: ##::. ##:: ##::::::: \n" +
+            "::: ##:::: ##:::: ##: ########::::. ######::. #######:: ########:::: ##::::. #######:: ##:::. ##: ########: \n" +
+            ":::..:::::..:::::..::........::::::......::::.......:::........:::::..::::::.......:::..:::::..::........:: \n";
+    //Disregard code below. It is merely test code.
+    static Map<Long, String> map = new HashMap<>();
     static ArrayList<Long> keys = new ArrayList<>();
 
+    /**
+     * ASCII Art sourced from http://patorjk.com. Font is Banner-3D
+     */
     public static void intro() {
-
+        char[] arr = banner.toCharArray();
+        final int row = 8;
+        final int line = 109;
+        final int firstWord = row * line;
+        try {
+            for (int i = 0; i < arr.length; i++) {
+                System.out.print(arr[i]);
+                Thread.sleep(1L);
+                if (i > firstWord * 2) {
+                    Thread.sleep(3L);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(banner);
+        }
     }
 
-    public static void outro() {
-        //TODO - insert quote generator
-        //System.out.println("");
-    }
-
-
-    public static void main(String [] args){
+    public static void main(String[] args) {
         int length = 20000;
         LinkedList<Integer> linkedList = new LinkedList();
         ArrayList<Integer> arrayList = new ArrayList<>();
-        Integer [] array = new Integer[length];
+        Integer[] array = new Integer[length];
         Stack stack = new Stack();
         long lStart = 0;
         long lEnd = 0;
 
 
-        for(int i = 0; i < length; i++)  {
+        for (int i = 0; i < length; i++) {
             linkedList.add(i);
         }
 
-        for(int i = 0; i < length; i++)  {
+        for (int i = 0; i < length; i++) {
             arrayList.add(i);
         }
 
-        for(int i = 0; i < length; i++)  {
+        for (int i = 0; i < length; i++) {
             array[i] = i;
         }
 
-        for(int i = 0; i < length; i ++){
+        for (int i = 0; i < length; i++) {
             stack.push(i);
         }
 
@@ -66,7 +100,7 @@ public class Cosmetics {
         add(lEnd, lStart, "array list forEach");
 
         lStart = System.nanoTime();
-        for(int i =0; i < arrayList.size(); i++){
+        for (int i = 0; i < arrayList.size(); i++) {
             Long.valueOf(arrayList.get(0));
         }
         lEnd = System.nanoTime();
@@ -74,7 +108,7 @@ public class Cosmetics {
 
         lStart = System.nanoTime();
         Iterator a = linkedList.iterator();
-        while (a.hasNext()){
+        while (a.hasNext()) {
             a.next();
         }
         lEnd = System.nanoTime();
@@ -82,14 +116,14 @@ public class Cosmetics {
 
         lStart = System.nanoTime();
         Iterator b = arrayList.iterator();
-        while (b.hasNext()){
+        while (b.hasNext()) {
             b.next();
         }
         lEnd = System.nanoTime();
         add(lEnd, lStart, "array list iterator");
 
         lStart = System.nanoTime();
-        for(int i =0; i < array.length; i++){
+        for (int i = 0; i < array.length; i++) {
             Long.valueOf(array[i]);
         }
         lEnd = System.nanoTime();
@@ -97,8 +131,8 @@ public class Cosmetics {
 
         lStart = System.nanoTime();
         Iterator c = stack.iterator();
-        while(c.hasNext()){
-         Integer.valueOf((Integer)c.next());
+        while (c.hasNext()) {
+            Integer.valueOf((Integer) c.next());
         }
         lEnd = System.nanoTime();
         add(lEnd, lStart, "stack iterator");
@@ -106,9 +140,8 @@ public class Cosmetics {
         lStart = System.nanoTime();
         Iterator d = stack.iterator();
         System.out.println(stack.size());
-        for(; d.hasNext(); )
-        {
-            Integer.valueOf((Integer)stack.pop());
+        for (; d.hasNext(); ) {
+            Integer.valueOf((Integer) stack.pop());
         }
         lEnd = System.nanoTime();
         add(lEnd, lStart, "stack for loop");
@@ -117,15 +150,14 @@ public class Cosmetics {
         print();
     }
 
-    private static long duration(long a, long b){
+    private static long duration(long a, long b) {
         return b - a;
     }
 
-    private static void add(long lEnd, long lStart, String name){
+    private static void add(long lEnd, long lStart, String name) {
         long duration = duration(lStart, lEnd);
         keys.add(duration);
-        map.put(duration,name);
-
+        map.put(duration, name);
 
 
         /**
@@ -142,14 +174,14 @@ public class Cosmetics {
         //
     }
 
-
-    private static void print(){
+    private static void print() {
         Collections.sort(keys);
-        for(Long key : keys){
+        for (Long key : keys) {
             print(key, map.get(key));
         }
     }
-    private static void print(long duration, String name){
+
+    private static void print(long duration, String name) {
         System.out.printf("%20s time: %d\n", name, duration);
     }
 }

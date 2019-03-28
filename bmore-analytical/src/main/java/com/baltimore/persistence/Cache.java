@@ -10,7 +10,7 @@ public class Cache {
 
     DAOImpl daoImpl;
 
-    public Cache(DAOImpl daoImpl){
+    public Cache(DAOImpl daoImpl) {
         this.daoImpl = daoImpl;
     }
 
