@@ -25,18 +25,21 @@ Hopefully future developments will move this data from local disk to shared clou
 # Build instructions
 ./mvnw clean install
 
-# Run as a Spring Boot app
+# Run app locally
+Currently the app only runs locally. If you wish to help move the app to the cloud, then contact us.
+
+1. Run as a Spring Boot app
 Navigate to the project home direcorty and run the spring boot plugin.
 ```
 > cd /{project_home}/bmore-analytical
 > ./mvnw spring-boot:run
 ```
 
-# Run as a JAR
+2. Run using start script
 Download the source run the commands below:
 ```
 > cd {project_home_directory}/bmore-analytical
 > ./start.sh
 ```
 # First time running
-The first execution of the app will prompt you to create working directories. This is where raw data will be stored. 
+The first execution will prompt you to create required working directories. This is where raw data will be stored. Confirm "yes".
