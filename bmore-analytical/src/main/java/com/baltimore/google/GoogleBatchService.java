@@ -20,20 +20,23 @@ import static com.baltimore.common.Configuration.GOOGLE_CALL_LIMIT;
 public class GoogleBatchService {
 
     private GoogleClient google;
+    private static final int RUNTIME_EXCEPTION_MAX = 5;
+    private int GEOCODE_DAILY_CALL_COUNT = 1000;
+    private String GEOCODE_CALL_COUNT_TIME_STAMP;
+    private int GEOCODE_DAILY_CALL_MAX = 1000;
 
-    public GoogleBatchService(@Autowired GoogleClient googleClient) throws IOException {
+    public GoogleBatchService(@Autowired GoogleClient googleClient) {
         google = googleClient;
     }
 
-    public void crossReferenceWithGoogle(List<? extends Googleable> elements) throws IOException {
+    public void crossReferenceWithGoogle(List<? extends Googleable> elements)  {
         System.out.println(elements.size() != 0 ? String.format("\tGoogle Neighborhood. Police district. City Council Member. Analyzing %s police and city events...", elements.size()) : "\tBatch did not contain data required to cross reference. Skipping. ");
 
         List<Googleable> batch = new ArrayList<>();
-        int run_time_exceptions_max = 5;
+        int runtimeExceptions = 0;
         System.out.print("\tSearching... ");
 
         for (int i = 0; i < elements.size(); i++) {
-
             try {
                 GoogleResults response = callGoogle(elements.get(i));
                 if (GoogleResponse.isOK(response)) {
@@ -50,13 +53,12 @@ public class GoogleBatchService {
                 e.printStackTrace();
                 continue;
             } catch (RuntimeException e) {
-                if (run_time_exceptions_max >= 5) {
+                if (runtimeExceptions >= RUNTIME_EXCEPTION_MAX) {
                     throw new RuntimeException(e);
                 }
-                run_time_exceptions_max++;
+                runtimeExceptions++;
                 continue;
             }
-
         }
         System.out.print("\n\tSave complete\n");
     }
@@ -93,4 +95,14 @@ public class GoogleBatchService {
         }
     }
 
+    private void calculateGoogleGeoCodeCallMax() {
+        // get daily call count
+        // get timestamp
+        /* if ( timestamp isToday && DAILY_CALL_COUNT < DAILY_CALL_MAX  ){
+                return DAILY_CALL_MAX - DAILY_Call_Count;
+            else
+                return -1;
+
+         */
+    }
 }

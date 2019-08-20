@@ -12,6 +12,7 @@ import com.baltimore.opendata.scrubber.reader.BatchCitationReader;
 import com.baltimore.opendata.scrubber.writer.BatchWriter;
 import com.baltimore.persistence.Cache;
 import com.baltimore.persistence.DAOImpl;
+import com.baltimore.persistence.FileSystemSetup;
 import com.baltimore.persistence.FileSystemStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +44,7 @@ public class AppConfiguration {
 
     @Bean
     public ParkingController parkingController(@Autowired GoogleBatchService googleBatchService) throws Exception {
+        FileSystemSetup.setup();
         BatchCitationReader batchCitationReader = BatchCitationReader.init();
         BatchWriter writer = BatchWriter.init();
         return new ParkingController(batchCitationReader, googleBatchService, writer);

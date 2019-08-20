@@ -26,13 +26,13 @@ public class DAOImpl {
 
     public static DAOImpl init(String host, String port) throws SQLException {
         Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://" + host + ":" + port + "/baltimore?useUnicode=true&characterEncoding=UTF-8", "bmore", "benutzenmaschine");
+                "jdbc:mysql://" + host + ":" + port + "/baltimore?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=GMT", "bmore", "benutzenmaschine");
         return new DAOImpl(conn);
     }
 
     public static DAOImpl init() throws SQLException {
         Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/baltimore?useUnicode=true&characterEncoding=UTF-8", "bmore", "benutzenmaschine");
+                "jdbc:mysql://127.0.0.1:3306/baltimore?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=GMT", "bmore", "benutzenmaschine");
         return new DAOImpl(conn);
     }
 

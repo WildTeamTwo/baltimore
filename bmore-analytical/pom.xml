@@ -18,7 +18,7 @@
 
     <properties>
         <guavaVersion>23.0</guavaVersion>
-        <lombokVersion>1.16.20</lombokVersion>
+        <lombokVersion>1.18.0</lombokVersion>
         <jacksonVersion>2.9.8</jacksonVersion>
         <httpClientVersion>4.3.6</httpClientVersion>
         <jodaTimeVersion>2.9.4</jodaTimeVersion>
@@ -45,6 +45,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombokVersion}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -80,7 +81,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.32</version>
+            <version>8.0.17</version>
         </dependency>
         <dependency>
             <groupId>me.xdrop</groupId>
@@ -104,10 +105,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
+                    <encoding>UTF-8</encoding>
+                    <!--<fork>true</fork>
+                    <executable>/usr/lib/jvm/default-java/bin/javac</executable>-->
                 </configuration>
+
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

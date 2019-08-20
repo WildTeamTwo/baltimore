@@ -29,7 +29,7 @@ public class FileSystemSetup {
 
     public static void setup() throws AppSetupException, IOException {
         if (!fileExists(PROJECT_ROOT)) {
-            Console.outl("This app will create work directories. Continue (Y/N)? ");
+            Console.outl("This app will create working directories. Continue (Y/N)? ");
             if (!"Y".equalsIgnoreCase(Console.input())) {
                 throw new AppSetupException();
             }
