@@ -11,7 +11,7 @@
     <properties>
         <guavaVersion>23.0</guavaVersion>
         <lombokVersion>1.16.20</lombokVersion>
-        <jacksonVersion>2.9.1</jacksonVersion>
+        <jacksonVersion>2.12.6.1</jacksonVersion>
         <httpClientVersion>4.3.3</httpClientVersion>
         <jodaTimeVersion>2.9.4</jodaTimeVersion>
     </properties>
